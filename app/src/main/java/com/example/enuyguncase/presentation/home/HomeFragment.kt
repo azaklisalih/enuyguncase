@@ -7,15 +7,16 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doAfterTextChanged
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.enuyguncase.R
+import androidx.recyclerview.widget.RecyclerView
 import com.example.enuyguncase.databinding.FragmentHomeBinding
-import com.google.android.material.appbar.MaterialToolbar
+import com.example.enuyguncase.domain.usecase.home.filter.FilterSheetFragment
+import com.example.enuyguncase.domain.usecase.home.sort.SortSheetFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -23,7 +24,7 @@ import kotlinx.coroutines.launch
 class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: HomeViewModel by viewModels()
+    private val viewModel: HomeViewModel by activityViewModels()
     private lateinit var adapter: ProductListAdapter
 
 
@@ -41,13 +42,9 @@ class HomeFragment : Fragment() {
         setAdapters()
         setObservers()
         setListeners()
-
-
-
-
     }
 
-    fun setToolbar() {
+    private fun setToolbar() {
         (activity as? AppCompatActivity)?.supportActionBar?.apply {
             title = ""
             setDisplayHomeAsUpEnabled(false)
@@ -56,7 +53,7 @@ class HomeFragment : Fragment() {
 
     }
 
-    fun setAdapters() {
+    private fun setAdapters() {
         adapter = ProductListAdapter {
             findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToProductDetailFragment(it.id))
         }
@@ -64,21 +61,38 @@ class HomeFragment : Fragment() {
         binding.rvProducts.layoutManager = LinearLayoutManager(requireContext())
     }
 
-    fun setListeners() {
+    private fun setListeners() {
         binding.filterSortBar.btnFilter.setOnClickListener{
-            // Filter işlemleri burada yapılır
+            FilterSheetFragment().show(childFragmentManager, "filter_sheet")
         }
 
-        binding.filterSortBar.btnFilter.setOnClickListener{
-            // Sort işlemleri burada yapılır
+        binding.filterSortBar.btnSort.setOnClickListener{
+            SortSheetFragment().show(childFragmentManager, "sort_sheet")
         }
 
         binding.searchBar.etSearch.doAfterTextChanged {
             viewModel.searchProducts(it.toString())
         }
+
+        binding.rvProducts.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+                val lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
+                val totalItemCount = layoutManager.itemCount
+
+                val isLoading = viewModel.uiState.value.isLoading
+                val totalItems = viewModel.uiState.value.total
+
+                if (lastVisibleItemPosition >= totalItemCount - 5 && !isLoading && totalItemCount < totalItems) {
+                    viewModel.loadNextPage()
+                }
+
+            }
+        })
     }
 
-    fun setObservers() {
+    private fun setObservers() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collect { state ->

@@ -43,6 +43,10 @@ android {
         compose = true
         viewBinding = true
     }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion = libs.versions.composeCompiler.get()
+    }
 }
 
 dependencies {
@@ -102,6 +106,8 @@ dependencies {
     implementation(libs.androidx.material3)
 
     implementation(libs.glide)
+
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
 
 
 }

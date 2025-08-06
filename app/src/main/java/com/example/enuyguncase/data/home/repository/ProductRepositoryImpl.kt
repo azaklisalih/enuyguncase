@@ -3,6 +3,9 @@ package com.example.enuyguncase.data.home.repository
 import com.example.enuyguncase.data.home.mapper.toDomain
 import com.example.enuyguncase.data.home.mapper.toDomainList
 import com.example.enuyguncase.data.home.remote.api.ProductApi
+import com.example.enuyguncase.data.home.remote.dto.CategoryDto
+import com.example.enuyguncase.data.home.remote.dto.ProductsResponse
+import com.example.enuyguncase.domain.model.Category
 import com.example.enuyguncase.domain.model.Product
 import com.example.enuyguncase.domain.repository.ProductRepository
 import com.google.ai.client.generativeai.common.ServerException
@@ -24,15 +27,13 @@ class ProductRepositoryImpl @Inject constructor(
         skip: Int?,
         sortBy: String?,
         order: String?
-    ): Flow<List<Product>> = flow {
+    ): Flow<ProductsResponse> = flow {
         val response = api.getProducts(limit, skip, sortBy, order)
-        // 2) HTTP koduna göre branch
         when (response.code()) {
             in 200..299 -> {
                 val body = response.body()
                     ?: throw Exception("Sunucudan boş yanıt geldi")
-                // 3) Domain model listesine dönüştür ve emit et
-                emit(body.toDomainList())
+                emit(body)
             }
 
             in 400..499 -> {
@@ -63,12 +64,12 @@ class ProductRepositoryImpl @Inject constructor(
         }
     }.flowOn(Dispatchers.IO)
 
-    override fun searchProductsFlow(query: String): Flow<List<Product>> = flow {
+    override fun searchProductsFlow(query: String): Flow<ProductsResponse> = flow {
         val response = api.searchProducts(query)
         when (response.code()) {
             in 200..299 -> {
                 val body = response.body() ?: throw Exception("Sunucudan boş yanıt geldi")
-                emit(body.toDomainList())
+                emit(body)
             }
 
             in 400..499 -> throw Exception("İstemci hatası: ${response.message()}")
@@ -77,13 +78,12 @@ class ProductRepositoryImpl @Inject constructor(
         }
     }.flowOn(Dispatchers.IO)
 
-    override fun getCategoriesFlow(): Flow<List<String>> = flow {
+    override fun getCategoriesFlow(): Flow<List<Category>> = flow {
         val response = api.getCategories()
         when (response.code()) {
             in 200..299 -> {
-                val body =
-                    response.body() ?: throw Exception("Sunucudan boş kategori listesi geldi")
-                emit(body)
+                val body = response.body() ?: throw Exception("Sunucudan boş yanıt geldi")
+                emit(body.map { it.toDomain() })
             }
 
             in 400..499 -> throw Exception("İstemci hatası: ${response.message()}")
@@ -95,12 +95,14 @@ class ProductRepositoryImpl @Inject constructor(
     override fun getProductsByCategoryFlow(
         category: String,
         limit: Int?,
-        skip: Int?
-    ): Flow<List<Product>> = flow {
+        skip: Int?,
+        sortBy: String?,
+        order: String?
+    ): Flow<ProductsResponse> = flow {
         val response = api.getProductsByCategory(category, limit, skip)
         when (response.code()) {
             in 200..299 -> emit(
-                response.body()?.toDomainList()
+                response.body()
                     ?: throw Exception("Sunucudan boş yanıt geldi")
             )
 

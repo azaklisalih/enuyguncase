@@ -1,5 +1,6 @@
 package com.example.enuyguncase.data.home.remote.api
 
+import com.example.enuyguncase.data.home.remote.dto.CategoryDto
 import com.example.enuyguncase.data.home.remote.dto.ProductDto
 import com.example.enuyguncase.data.home.remote.dto.ProductsResponse
 import retrofit2.Response
@@ -28,13 +29,15 @@ interface ProductApi {
     ): Response<ProductsResponse>
 
     @GET("products/categories")
-    suspend fun getCategories(): Response<List<String>>
+    suspend fun getCategories(): Response<List<CategoryDto>>
 
     @GET("products/category/{category}")
     suspend fun getProductsByCategory(
         @Path("category") category: String,
         @Query("limit") limit: Int? = null,
-        @Query("skip")  skip: Int?  = null
+        @Query("skip")  skip: Int?  = null,
+        @Query("sortBy") sortBy: String? = null,
+        @Query("order") order: String? = null
     ): Response<ProductsResponse>
 
 }

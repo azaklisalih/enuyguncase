@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
+import com.example.enuyguncase.domain.model.Category
 import com.example.enuyguncase.domain.usecase.home.GetProductsByCategoryUseCase
 import com.example.enuyguncase.domain.usecase.home.GetProductsUseCase
 import com.example.enuyguncase.domain.usecase.home.SearchProductsUseCase
@@ -26,57 +27,64 @@ class HomeViewModel @Inject constructor(
     private val getByCategory: GetProductsByCategoryUseCase,
     private val searchProducts: SearchProductsUseCase,
     private val getCategories: GetCategoriesUseCase
-): ViewModel() {
+) : ViewModel() {
 
     private val _uiState = MutableStateFlow(HomeUIState(isLoading = true))
     val uiState: StateFlow<HomeUIState> = _uiState.asStateFlow()
 
-    val searchQuery = MutableLiveData<String>("")
+    val searchQuery = MutableLiveData("")
 
     val totalCountText = _uiState
-        .map { "(Toplam ${it.products.size} adet)" }
+        .map { "(Toplam ${it.total} adet)" }
         .asLiveData()
 
     init {
         fetchProducts()
     }
 
-     fun fetchProducts(
-         limit: Int? = null,
-         skip: Int? = null,
-         sortBy: String? = null,
-         order: String? = null
-     ) {
-       viewModelScope.launch {
-           getProducts.invoke(limit, skip, sortBy, order).onStart {
-               _uiState.value = HomeUIState(isLoading = true)
-           }.catch {
-               _uiState.value = HomeUIState(error = it.message)
-           }.collect { products ->
-               _uiState.value = HomeUIState(products = products)
-           }
-       }
-
-    }
-
-    fun fetchByCategory(
-        category: String,
-        limit: Int? = null,
-        skip: Int? = null
+    private fun loadPage(
+        category: String? = uiState.value.selectedCategory,
+        limit: Int = uiState.value.pageSize,
+        skip: Int = uiState.value.page * uiState.value.pageSize,
+        sortBy: String? = uiState.value.selectedSortBy,
+        order: String? = uiState.value.selectedSortOrder
     ) {
         viewModelScope.launch {
-            getByCategory.invoke(category, limit, skip)
-                .onStart {
-                    _uiState.update { it.copy(isLoading = true, error = null) }
+            val flow = if (category == null) {
+                getProducts(limit, skip, sortBy, order)
+            } else {
+                getByCategory(category, limit, skip)
+            }
+            flow.onStart {
+                _uiState.update { it.copy(isLoading = true, error = null) }
+            }.catch {
+                _uiState.update { it.copy(isLoading = false, error = it.error) }
+            }.collect { page ->
+                _uiState.update { prev ->
+                    val combined = if (skip == 0) {
+                        page.products
+                    } else {
+                        prev.products + page.products
+                    }
+                    val newPage = if (skip == 0) 0 else prev.page + 1
+                    prev.copy(
+                        products = combined,
+                        isLoading = false,
+                        total = page.total,
+                        page = newPage,
+                        selectedCategory = category,
+                        selectedSortBy = sortBy,
+                        selectedSortOrder = order
+                    )
                 }
-                .catch { e ->
-                    _uiState.update { it.copy(isLoading = false, error = e.message) }
-                }
-                .collect { list ->
-                    _uiState.update { it.copy(products = list, isLoading = false) }
-                }
+            }
         }
     }
+
+    private fun fetchProducts() = loadPage(category = null)
+    fun sortProducts(sortBy: String?, order: String?) = loadPage(sortBy = sortBy, order = order)
+
+    fun fetchByCategory(category: String) = loadPage(category = category)
 
     fun searchProducts(query: String) {
         viewModelScope.launch {
@@ -87,13 +95,44 @@ class HomeViewModel @Inject constructor(
                 .catch { e ->
                     _uiState.update { it.copy(isLoading = false, error = e.message) }
                 }
-                .collect { list ->
-                    _uiState.update { it.copy(products = list, isLoading = false) }
+                .collect { page ->
+                    _uiState.update {
+                        it.copy(
+                            products = page.products,
+                            total = page.total,
+                            page = 0,
+                            selectedCategory = null,
+                            selectedSortBy = null,
+                            selectedSortOrder = null,
+                            isLoading = false
+                        )
+                    }
                 }
         }
     }
 
-    fun loadCategories(): Flow<List<String>> = getCategories.invoke()
+    fun loadCategories(): Flow<List<Category>> = getCategories.invoke()
 
+    fun loadNextPage() {
+        val s = uiState.value
+        if (s.isLoading || s.products.size >= s.total) return
+        loadPage(
+            category = s.selectedCategory,
+            skip = (s.page + 1) * s.pageSize
+        )
+    }
 
+    fun clearFilter() {
+        _uiState.update {
+            it.copy(
+                selectedCategory = null,
+                selectedSortBy = null,
+                selectedSortOrder = null
+            )
+        }
+        fetchProducts()
+    }
+    fun updateSelectedCategory(category: String) {
+        _uiState.update { it.copy(selectedCategory = category) }
+    }
 }
