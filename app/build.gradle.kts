@@ -109,5 +109,13 @@ dependencies {
 
     implementation(libs.androidx.lifecycle.viewmodel.compose)
 
+    implementation(libs.coil.compose)
+    // Compose UI
+    implementation(libs.ui)
+    implementation(libs.ui.tooling.preview)
+    // Material3
+    implementation(libs.material3)
+
+
 
 }

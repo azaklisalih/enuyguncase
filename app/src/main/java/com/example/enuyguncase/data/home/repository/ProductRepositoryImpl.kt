@@ -1,9 +1,7 @@
 package com.example.enuyguncase.data.home.repository
 
 import com.example.enuyguncase.data.home.mapper.toDomain
-import com.example.enuyguncase.data.home.mapper.toDomainList
 import com.example.enuyguncase.data.home.remote.api.ProductApi
-import com.example.enuyguncase.data.home.remote.dto.CategoryDto
 import com.example.enuyguncase.data.home.remote.dto.ProductsResponse
 import com.example.enuyguncase.domain.model.Category
 import com.example.enuyguncase.domain.model.Product

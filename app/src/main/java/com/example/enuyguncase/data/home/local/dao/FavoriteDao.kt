@@ -1,0 +1,23 @@
+package com.example.enuyguncase.data.home.local.dao
+
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
+import com.example.enuyguncase.data.home.local.entities.FavoriteEntity
+import kotlinx.coroutines.flow.Flow
+
+@Dao
+interface FavoriteDao {
+    @Query("SELECT * FROM favorites")
+    fun getAll(): Flow<List<FavoriteEntity>>
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insert(fav: FavoriteEntity)
+
+    @Query("DELETE FROM favorites WHERE productId = :id")
+    suspend fun deleteById(id: Int)
+
+    @Query("SELECT COUNT(*) FROM favorites WHERE productId = :id")
+    suspend fun countById(id: Int): Int
+}

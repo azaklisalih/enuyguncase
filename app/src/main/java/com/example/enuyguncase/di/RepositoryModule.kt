@@ -1,6 +1,8 @@
 package com.example.enuyguncase.di
 
+import com.example.enuyguncase.data.home.repository.FavoriteRepositoryImpl
 import com.example.enuyguncase.data.home.repository.ProductRepositoryImpl
+import com.example.enuyguncase.domain.repository.FavoriteRepository
 import com.example.enuyguncase.domain.repository.ProductRepository
 import dagger.Binds
 import dagger.Module
@@ -16,4 +18,10 @@ abstract class RepositoryModule {
     abstract fun bindProductRepository(
         impl: ProductRepositoryImpl
     ): ProductRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindFavoriteRepository(
+        impl: FavoriteRepositoryImpl
+    ): FavoriteRepository
 }

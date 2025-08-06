@@ -1,4 +1,4 @@
-package com.example.enuyguncase.domain.usecase.home.filter
+package com.example.enuyguncase.presentation.home.filter
 
 import android.os.Bundle
 import android.view.LayoutInflater
