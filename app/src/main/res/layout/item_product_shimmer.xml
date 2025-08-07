@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="4dp"
+    app:cardBackgroundColor="@android:color/white">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="12dp">
+
+        <!-- Product Image Placeholder -->
+        <View
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginEnd="12dp"
+            android:background="@drawable/shimmer_background" />
+
+        <!-- Product Details -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center_vertical">
+
+            <!-- Title Placeholder -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="16dp"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/shimmer_background" />
+
+            <!-- Description Placeholder -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="12dp"
+                android:layout_marginBottom="4dp"
+                android:background="@drawable/shimmer_background" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="12dp"
+                android:layout_weight="0.7"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/shimmer_background" />
+
+            <!-- Price Placeholder -->
+            <View
+                android:layout_width="80dp"
+                android:layout_height="18dp"
+                android:background="@drawable/shimmer_background" />
+
+        </LinearLayout>
+
+        <!-- Add to Cart Button Placeholder -->
+        <View
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_gravity="center_vertical"
+            android:background="@drawable/shimmer_background" />
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView> 

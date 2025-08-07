@@ -27,8 +27,6 @@ class ProductDetailFragment : Fragment() {
         setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
         setBackgroundColor(android.graphics.Color.WHITE)
         setContent {
-            val productId = args.productId
-            vm.fetchDetail(productId)
             val uiState by vm.uiState.collectAsState()
             val isFav by vm.isFav.collectAsState()
             ProductDetailScreen(
@@ -38,8 +36,11 @@ class ProductDetailFragment : Fragment() {
                 onToggleFavorite = { vm.toggleFavorite() },
                 onAddToCart      = { vm.addToCart(it) }
             )
-
         }
     }
 
+    override fun onViewCreated(view: android.view.View, savedInstanceState: android.os.Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        vm.fetchDetail(args.productId)
+    }
 }

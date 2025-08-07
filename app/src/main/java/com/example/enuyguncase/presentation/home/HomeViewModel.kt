@@ -85,7 +85,7 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun fetchProducts() = loadPage(category = null)
+    fun fetchProducts() = loadPage(category = null)
     fun sortProducts(sortBy: String?, order: String?) {
         val currentState = uiState.value
         

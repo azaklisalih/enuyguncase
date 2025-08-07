@@ -27,6 +27,7 @@ import androidx.compose.foundation.Image
 import coil.compose.rememberAsyncImagePainter
 import com.example.enuyguncase.domain.model.Product
 import com.example.enuyguncase.presentation.productdetail.ProductDetailUIState
+import com.example.enuyguncase.presentation.productdetail.screen.ProductDetailShimmerScreen
 import com.example.enuyguncase.ui.theme.ButtonColor
 import com.example.enuyguncase.ui.theme.RedHeart
 import com.example.enuyguncase.util.StringResource
@@ -40,6 +41,11 @@ fun ProductDetailScreen(
     onToggleFavorite: () -> Unit,
     onAddToCart: (Product) -> Unit
 ) {
+    if (uiState.isLoading) {
+        ProductDetailShimmerScreen(onBack = onBack)
+        return
+    }
+
     val product = uiState.product ?: return
 
     Scaffold(

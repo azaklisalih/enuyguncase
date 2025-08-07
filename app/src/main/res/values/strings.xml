@@ -96,8 +96,11 @@
     <!-- Common -->
     <string name="common_loading">Yükleniyor...</string>
     
-    <!-- com.example.enuyguncase.ui.theme.getError Messages -->
+    <!-- Error Messages -->
     <string name="error_empty_response">Sunucudan boş yanıt geldi</string>
+    <string name="error_loading_products">Ürünler yüklenirken bir hata oluştu</string>
+    <string name="error_icon">Hata ikonu</string>
+    <string name="retry">Tekrar Dene</string>
     <string name="error_client">İstemci hatası</string>
     <string name="error_server">Sunucu hatası</string>
     <string name="error_unexpected_http">Beklenmeyen HTTP kodu: %d</string>

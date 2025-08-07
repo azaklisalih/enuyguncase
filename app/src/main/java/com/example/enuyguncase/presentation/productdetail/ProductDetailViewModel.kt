@@ -41,7 +41,6 @@ class ProductDetailViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 delay(1000)
-                
                 getById(productId)
                     .onStart { _uiState.update { it.copy(isLoading = true, error = null) } }
                     .catch { e ->

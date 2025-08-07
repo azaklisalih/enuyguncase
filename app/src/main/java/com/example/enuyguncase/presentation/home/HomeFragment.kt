@@ -91,6 +91,10 @@ class HomeFragment : Fragment() {
             viewModel.searchProducts(it.toString())
         }
 
+        binding.btnRetry.setOnClickListener {
+            viewModel.fetchProducts()
+        }
+
         binding.rvProducts.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
@@ -113,30 +117,31 @@ class HomeFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collect { state ->
-                    adapter.submitList(state.products)
-        
-                    binding.tvCount.text = getString(R.string.home_total_products_format, state.total)
-                    /* binding.progressBar.isVisible = state.error != null
-                     binding.tvError.isVisible = state.error != null
-                     binding.tvError.text = state.error*/
+                    if (state.isLoading && state.products.isEmpty()) {
+                        adapter.setLoading(true)
+                        binding.tvCount.text = getString(R.string.home_total_products_format, 0)
+                        binding.errorLayout.visibility = View.GONE
+                        binding.rvProducts.visibility = View.VISIBLE
+                    } else if (state.error != null && state.products.isEmpty()) {
+                        adapter.setLoading(false)
+                        binding.errorLayout.visibility = View.VISIBLE
+                        binding.rvProducts.visibility = View.GONE
+                        binding.tvError.text = state.error
+                        binding.tvCount.text = getString(R.string.home_total_products_format, 0)
+                    } else {
+                        adapter.setLoading(false)
+                        adapter.submitProducts(state.products)
+                        binding.tvCount.text = getString(R.string.home_total_products_format, state.total)
+                        binding.errorLayout.visibility = View.GONE
+                        binding.rvProducts.visibility = View.VISIBLE
+                    }
                 }
             }
-
         }
-
-        /*viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                cartViewModel.cartItems.collect { list ->
-                    val count = list.sumOf { it.quantity }
-    
-                    val badge = bottomNav.getOrCreateBadge(R.id.cartFragment)
-                    badge.isVisible = count > 0
-                    badge.number    = count
-
-                }
-            }
-        }*/
-
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 }
