@@ -50,8 +50,14 @@ fun FavoriteScreen(
     products: List<Favorite>,
     onRemove: (Int) -> Unit,
     onItemClick: (Int) -> Unit,
-    onAddToCart: (Favorite) -> Unit
+    onAddToCart: (Favorite) -> Unit,
+    isLoading: Boolean = false
 ) {
+    if (isLoading) {
+        FavoriteShimmerScreen()
+        return
+    }
+
     Scaffold(
         modifier = Modifier.background(MaterialTheme.colorScheme.surface),
         containerColor = Surface,

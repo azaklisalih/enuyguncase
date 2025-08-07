@@ -24,10 +24,10 @@ class FavoriteFragment : Fragment() {
         setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
         setBackgroundColor(android.graphics.Color.WHITE)
         setContent {
-            val favorites by vm.favorites.collectAsState()
+            val uiState by vm.uiState.collectAsState()
 
             FavoriteScreen(
-                products = favorites,
+                products = uiState.favorites,
                 onAddToCart = { favorite ->
                     vm.addToCart(favorite)
                 },
@@ -38,7 +38,8 @@ class FavoriteFragment : Fragment() {
                             productId
                         )
                     )
-                }
+                },
+                isLoading = uiState.isLoading
             )
         }
     }
