@@ -20,6 +20,12 @@
         <item name="android:textStyle">bold</item>
         <item name="android:textSize">24sp</item>
     </style>
+
+    <style name="TextStyle_Bold_Very_Small" parent="TextAppearance.Material3.HeadlineSmall">
+        <item name="android:fontFamily">@font/inter_bold</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">18sp</item>
+    </style>
     
     <!-- Medium Text Styles -->
     <style name="TextStyle_Medium_Large" parent="TextAppearance.Material3.TitleLarge">

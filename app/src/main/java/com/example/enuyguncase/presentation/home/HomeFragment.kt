@@ -20,9 +20,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.enuyguncase.R
 import com.example.enuyguncase.databinding.FragmentHomeBinding
+import com.example.enuyguncase.presentation.common.navigation.NavigationRouter
 import com.example.enuyguncase.presentation.home.filter.FilterSheetFragment
 import com.example.enuyguncase.presentation.home.sort.SortSheetFragment
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -31,6 +33,9 @@ class HomeFragment : Fragment() {
     private val binding get() = _binding!!
     private val viewModel: HomeViewModel by activityViewModels()
     private lateinit var adapter: ProductListAdapter
+    
+    @Inject
+    lateinit var navigationRouter: NavigationRouter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) = FragmentHomeBinding.inflate(inflater, container, false).also {
         _binding = it
@@ -86,8 +91,8 @@ class HomeFragment : Fragment() {
     }
 
     private fun setAdapters() {
-        adapter = ProductListAdapter {
-            findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToProductDetailFragment(it.id))
+        adapter = ProductListAdapter { product ->
+            navigationRouter.navigateToProductDetail(findNavController(), product.id)
         }
         binding.rvProducts.adapter = adapter
         binding.rvProducts.layoutManager = LinearLayoutManager(requireContext())

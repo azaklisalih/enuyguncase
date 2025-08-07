@@ -38,7 +38,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/home_products"
-                    android:textAppearance="@style/TextStyle_Bold_Medium" />
+                    android:textAppearance="@style/TextStyle_Bold_Very_Small" />
 
                 <TextView
                     android:id="@+id/tvCount"
@@ -47,7 +47,7 @@
                     android:textColor="@color/medium_gray"
                     android:textSize="14sp"
                     android:layout_marginStart="8dp"
-                    android:layout_marginTop="4dp"/>
+                    android:layout_marginTop="2dp"/>
 
             </LinearLayout>
 
