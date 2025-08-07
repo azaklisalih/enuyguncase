@@ -2,9 +2,6 @@ package com.example.enuyguncase.di
 
 import android.content.Context
 import androidx.room.Room
-import androidx.room.migration.Migration
-import androidx.sqlite.db.SupportSQLiteDatabase
-import com.example.enuyguncase.data.common.converters.Converters
 import com.example.enuyguncase.data.home.local.AppDatabase
 import com.example.enuyguncase.data.home.local.dao.CartDao
 import com.example.enuyguncase.data.home.local.dao.FavoriteDao

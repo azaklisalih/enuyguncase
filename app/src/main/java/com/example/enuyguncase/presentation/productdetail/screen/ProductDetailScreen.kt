@@ -63,7 +63,10 @@ fun ProductDetailScreen(
                 },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = StringResource.commonBack())
+                        Icon(
+                            Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = StringResource.commonBack()
+                        )
                     }
                 },
                 actions = {
@@ -132,7 +135,8 @@ fun ProductDetailScreen(
 
 
                                 if (product.discountPercentage > 0) {
-                                    val discountText = StringResource.productDetailDiscount(product.discountPercentage.toInt())
+                                    val discountText =
+                                        StringResource.productDetailDiscount(product.discountPercentage.toInt())
                                     Box(
                                         contentAlignment = Alignment.Center,
                                         modifier = Modifier
@@ -217,7 +221,10 @@ fun ProductDetailScreen(
                         horizontalArrangement = Arrangement.spacedBy(24.dp)
                     ) {
                         Text("Stok: ${product.stock}", style = MaterialTheme.typography.labelMedium)
-                        Text("Puan: ${product.rating}", style = MaterialTheme.typography.labelMedium)
+                        Text(
+                            "Puan: ${product.rating}",
+                            style = MaterialTheme.typography.labelMedium
+                        )
                     }
 
                     Spacer(Modifier.height(16.dp))
@@ -243,9 +250,6 @@ fun ProductDetailScreen(
                         )
                     }
                 }
-
-
-
             }
         }
     )

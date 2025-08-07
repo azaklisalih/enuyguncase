@@ -103,7 +103,11 @@ class ProductListAdapter(
             }
 
             override fun areContentsTheSame(old: Any, new: Any): Boolean {
-                return old == new
+                return when {
+                    old is Product && new is Product -> old == new
+                    old is ShimmerItem && new is ShimmerItem -> old.id == new.id
+                    else -> false
+                }
             }
         }
     }

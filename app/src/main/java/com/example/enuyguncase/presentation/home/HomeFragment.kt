@@ -5,7 +5,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.widget.doAfterTextChanged
@@ -30,12 +32,10 @@ class HomeFragment : Fragment() {
     private val viewModel: HomeViewModel by activityViewModels()
     private lateinit var adapter: ProductListAdapter
 
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) = FragmentHomeBinding.inflate(inflater, container, false).also {
         _binding = it
         it.vm = viewModel
         it.lifecycleOwner = viewLifecycleOwner
-
     }.root
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -45,13 +45,31 @@ class HomeFragment : Fragment() {
         setObservers()
         setListeners()
         setupWindowInsets()
+        setupClickOutsideToHideKeyboard()
+    }
+
+    private fun setupClickOutsideToHideKeyboard() {
+        binding.root.setOnClickListener {
+            hideKeyboard()
+        }
+        binding.rvProducts.setOnClickListener {
+            hideKeyboard()
+        }
+    }
+
+    private fun hideKeyboard() {
+        val currentFocus = requireActivity().currentFocus
+        if (currentFocus != null) {
+            val imm = ContextCompat.getSystemService(requireContext(), InputMethodManager::class.java)
+            imm?.hideSoftInputFromWindow(currentFocus.windowToken, 0)
+            currentFocus.clearFocus()
+        }
     }
 
     private fun setupWindowInsets() {
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { _, windowInsets ->
             val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
             
-    
             binding.root.setPadding(
                 binding.root.paddingLeft,
                 insets.top,
@@ -64,10 +82,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun setToolbar() {
-
         (activity as? AppCompatActivity)?.supportActionBar?.hide()
-        
-
     }
 
     private fun setAdapters() {
@@ -80,10 +95,12 @@ class HomeFragment : Fragment() {
 
     private fun setListeners() {
         binding.filterSortBar.btnFilter.setOnClickListener{
+            hideKeyboard() // Filter açılırken keyboard'u kapat
             FilterSheetFragment().show(childFragmentManager, "filter_sheet")
         }
 
         binding.filterSortBar.btnSort.setOnClickListener{
+            hideKeyboard() // Sort açılırken keyboard'u kapat
             SortSheetFragment().show(childFragmentManager, "sort_sheet")
         }
 
@@ -108,7 +125,6 @@ class HomeFragment : Fragment() {
                 if (lastVisibleItemPosition >= totalItemCount - 5 && !isLoading && totalItemCount < totalItems) {
                     viewModel.loadNextPage()
                 }
-
             }
         })
     }

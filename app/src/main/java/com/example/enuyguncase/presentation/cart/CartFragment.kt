@@ -22,20 +22,18 @@ class CartFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ) = ComposeView(requireContext()).apply {
-        // ViewLifecycle ile uyumlu temizleme
+
         setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
 
         setContent {
-            // 1) Flow<List<CartItem>> → State<List<CartItem>>
-            val items by vm.cartItems.collectAsState(initial = emptyList())
-
-            // 2) Sepet ekranını çiz
+            val uiState by vm.uiState.collectAsState()
             CartScreen(
-                cartItems = items,
+                cartItems = uiState.cartItems,
                 onIncrease = { vm.increaseQuantity(it) },
                 onDecrease = { vm.decreaseQuantity(it) },
                 onRemove = { vm.removeFromCart(it) },
-                onCheckout = { findNavController().navigate(CartFragmentDirections.actionCartFragmentToCheckoutFragment()) }
+                onCheckout = { findNavController().navigate(CartFragmentDirections.actionCartFragmentToCheckoutFragment()) },
+                isLoading = uiState.isLoading
             )
         }
     }

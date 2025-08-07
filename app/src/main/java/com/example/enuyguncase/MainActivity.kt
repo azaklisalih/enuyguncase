@@ -63,8 +63,8 @@ class MainActivity : AppCompatActivity() {
 
         lifecycleScope.launch {
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                cartViewModel.cartItems.collect { list ->
-                    val count = list.sumOf { it.quantity }
+                cartViewModel.uiState.collect { uiState ->
+                    val count = uiState.cartItems.sumOf { it.quantity }
                     val badge = bottomNav.getOrCreateBadge(R.id.cartFragment)
                     badge.isVisible = count > 0
                     badge.number    = count

@@ -15,8 +15,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.Card
@@ -40,8 +38,6 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.enuyguncase.R
 import com.example.enuyguncase.domain.model.CartItem
-import com.example.enuyguncase.ui.theme.AppFontFamily
-import com.example.enuyguncase.ui.theme.AppTypography
 import com.example.enuyguncase.ui.theme.Black
 import com.example.enuyguncase.ui.theme.CardColor
 import com.example.enuyguncase.ui.theme.MediumGray
@@ -55,8 +51,14 @@ fun CartScreen(
     onIncrease: (productId: Int) -> Unit,
     onDecrease: (productId: Int) -> Unit,
     onRemove: (productId: Int) -> Unit,
-    onCheckout: () -> Unit
+    onCheckout: () -> Unit,
+    isLoading: Boolean = false
 ) {
+    if (isLoading) {
+        CartShimmerScreen()
+        return
+    }
+
     Scaffold(
         modifier = Modifier.background(Surface),
         topBar = {

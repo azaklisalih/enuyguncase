@@ -20,6 +20,7 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.delay
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
@@ -47,40 +48,48 @@ class HomeViewModel @Inject constructor(
         order: String? = uiState.value.selectedSortOrder
     ) {
         viewModelScope.launch {
-            val flow = if (category == null) {
-                getProducts(limit, skip, sortBy, order)
-            } else {
-                getByCategory(category, limit, skip, null, null)
-            }
-            flow.onStart {
-                _uiState.update { it.copy(isLoading = true, error = null) }
-            }.catch {
-                _uiState.update { it.copy(isLoading = false, error = it.error) }
-            }.collect { page ->
-                _uiState.update { prev ->
-                    val combined = if (skip == 0) {
-                        page.products
-                    } else {
-                        prev.products + page.products
-                    }
-                    
-                    val sortedProducts = if (category != null && sortBy != null) {
-                        sortProductsLocally(combined, sortBy, order)
-                    } else {
-                        combined
-                    }
-                    
-                    val newPage = if (skip == 0) 0 else prev.page + 1
-                    prev.copy(
-                        products = sortedProducts,
-                        isLoading = false,
-                        total = page.total,
-                        page = newPage,
-                        selectedCategory = category,
-                        selectedSortBy = sortBy,
-                        selectedSortOrder = order
-                    )
+            try {
+                if (skip == 0) {
+                    delay(1000)
                 }
+                
+                val flow = if (category == null) {
+                    getProducts(limit, skip, sortBy, order)
+                } else {
+                    getByCategory(category, limit, skip, null, null)
+                }
+                flow.onStart {
+                    _uiState.update { it.copy(isLoading = true, error = null) }
+                }.catch {
+                    _uiState.update { it.copy(isLoading = false, error = it.error) }
+                }.collect { page ->
+                    _uiState.update { prev ->
+                        val combined = if (skip == 0) {
+                            page.products
+                        } else {
+                            prev.products + page.products
+                        }
+                        
+                        val sortedProducts = if (category != null && sortBy != null) {
+                            sortProductsLocally(combined, sortBy, order)
+                        } else {
+                            combined
+                        }
+                        
+                        val newPage = if (skip == 0) 0 else prev.page + 1
+                        prev.copy(
+                            products = sortedProducts,
+                            isLoading = false,
+                            total = page.total,
+                            page = newPage,
+                            selectedCategory = category,
+                            selectedSortBy = sortBy,
+                            selectedSortOrder = order
+                        )
+                    }
+                }
+            } catch (exception: Exception) {
+                _uiState.update { it.copy(isLoading = false, error = exception.message) }
             }
         }
     }

@@ -44,38 +44,27 @@ fun CheckoutScreen(
     onBack: () -> Unit,
     onPay: () -> Unit
 ) {
-    
-    
-    fun formatPhoneNumber(phone: String): String {
-        val digitsOnly = phone.replace("\\D".toRegex(), "")
-        return when {
-            digitsOnly.length <= 4 -> digitsOnly
-            digitsOnly.length <= 7 -> "${digitsOnly.substring(0, 4)} ${digitsOnly.substring(4)}"
-            digitsOnly.length <= 9 -> "${digitsOnly.substring(0, 4)} ${digitsOnly.substring(4, 7)} ${digitsOnly.substring(7)}"
-            else -> "${digitsOnly.substring(0, 4)} ${digitsOnly.substring(4, 7)} ${digitsOnly.substring(7, 9)} ${digitsOnly.substring(9, minOf(11, digitsOnly.length))}"
-        }
-    }
-    
-    
+
+
     val phoneDigitsOnly = phone.replace("\\D".toRegex(), "")
-    val isPhoneValid = phoneDigitsOnly.length >= 10 && phoneDigitsOnly.length <= 11
-    
-    
+    val isPhoneValid = phoneDigitsOnly.length in 10..11
+
     val isNameError = name.isBlank()
-    val isEmailError = email.isBlank() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
+    val isEmailError =
+        email.isBlank() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
     val isPhoneError = phone.isBlank() || !isPhoneValid
-    
-    
-    val isFormValid = name.isNotBlank() && 
-                     email.isNotBlank() && 
-                     android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches() &&
-                     phone.isNotBlank() &&
-                     isPhoneValid
+
+
+    val isFormValid = name.isNotBlank() &&
+            email.isNotBlank() &&
+            android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches() &&
+            phone.isNotBlank() &&
+            isPhoneValid
 
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { 
+                title = {
                     Text(
                         text = StringResource.checkoutTitle(),
                         modifier = Modifier.fillMaxWidth(),
@@ -85,7 +74,10 @@ fun CheckoutScreen(
                 },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = StringResource.commonBack())
+                        Icon(
+                            Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = StringResource.commonBack()
+                        )
                     }
                 },
                 colors = TopAppBarDefaults.mediumTopAppBarColors(containerColor = Color.White)
@@ -113,7 +105,7 @@ fun CheckoutScreen(
                 isError = isNameError,
                 shape = RoundedCornerShape(12.dp)
             )
-            
+
             if (isNameError) {
                 Text(
                     text = StringResource.checkoutNameRequired(),
@@ -135,7 +127,7 @@ fun CheckoutScreen(
                 shape = RoundedCornerShape(12.dp),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email)
             )
-            
+
             if (isEmailError) {
                 Text(
                     text = if (email.isBlank()) StringResource.checkoutEmailRequired() else StringResource.checkoutEmailInvalid(),
@@ -157,7 +149,7 @@ fun CheckoutScreen(
                 shape = RoundedCornerShape(12.dp),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone)
             )
-            
+
             if (isPhoneError) {
                 Text(
                     text = if (phone.isBlank()) StringResource.checkoutPhoneRequired() else StringResource.checkoutPhoneInvalid(),
@@ -168,8 +160,8 @@ fun CheckoutScreen(
             }
 
             Spacer(Modifier.height(32.dp))
-            
-            
+
+
             Button(
                 onClick = onPay,
                 enabled = isFormValid,
@@ -183,12 +175,12 @@ fun CheckoutScreen(
                 )
             ) {
                 Text(
-                    StringResource.checkoutConfirmOrderButton(), 
+                    StringResource.checkoutConfirmOrderButton(),
                     style = MaterialTheme.typography.labelLarge,
                     color = if (isFormValid) Color.White else Color(0xFF757575)
                 )
             }
-            
+
             Spacer(Modifier.height(32.dp))
         }
     }
