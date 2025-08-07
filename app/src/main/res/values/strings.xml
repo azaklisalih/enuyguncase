@@ -101,6 +101,7 @@
     <string name="error_loading_products">Ürünler yüklenirken bir hata oluştu</string>
     <string name="error_icon">Hata ikonu</string>
     <string name="retry">Tekrar Dene</string>
+    <string name="splash_subtitle">Alışveriş Deneyimi</string>
     <string name="error_client">İstemci hatası</string>
     <string name="error_server">Sunucu hatası</string>
     <string name="error_unexpected_http">Beklenmeyen HTTP kodu: %d</string>
