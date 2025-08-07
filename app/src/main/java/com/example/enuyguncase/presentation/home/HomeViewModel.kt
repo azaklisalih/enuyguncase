@@ -50,7 +50,7 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 if (skip == 0) {
-                    delay(1000)
+                    delay(500)
                 }
                 
                 val flow = if (category == null) {
