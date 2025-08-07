@@ -1,6 +1,7 @@
 package com.example.enuyguncase.di
 
 import com.example.enuyguncase.data.home.remote.api.ProductApi
+import com.example.enuyguncase.util.Constants.BASE_URL
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import dagger.Module
@@ -16,8 +17,6 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
-
-    private const val BASE_URL = "https://dummyjson.com/"
 
     @Provides
     @Singleton
