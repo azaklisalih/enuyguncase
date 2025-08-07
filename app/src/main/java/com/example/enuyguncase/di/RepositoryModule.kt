@@ -1,7 +1,9 @@
 package com.example.enuyguncase.di
 
+import com.example.enuyguncase.data.home.repository.CartRepositoryImpl
 import com.example.enuyguncase.data.home.repository.FavoriteRepositoryImpl
 import com.example.enuyguncase.data.home.repository.ProductRepositoryImpl
+import com.example.enuyguncase.domain.repository.CartRepository
 import com.example.enuyguncase.domain.repository.FavoriteRepository
 import com.example.enuyguncase.domain.repository.ProductRepository
 import dagger.Binds
@@ -24,4 +26,10 @@ abstract class RepositoryModule {
     abstract fun bindFavoriteRepository(
         impl: FavoriteRepositoryImpl
     ): FavoriteRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindCartRepository(
+        impl: CartRepositoryImpl
+    ): CartRepository
 }

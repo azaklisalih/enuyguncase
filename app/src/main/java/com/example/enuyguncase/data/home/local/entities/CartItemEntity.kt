@@ -3,12 +3,12 @@ package com.example.enuyguncase.data.home.local.entities
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "favorites")
-data class FavoriteEntity(
+@Entity(tableName = "cart_items")
+data class CartItemEntity(
     @PrimaryKey val productId: Int,
     val title: String,
-    val images: List<String>,
-    val description: String,
     val price: Double,
-    val discountedPrice: Double,
+    val discountPrice: Double,
+    val thumbnail: String,
+    val quantity: Int
 )

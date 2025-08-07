@@ -13,7 +13,7 @@ class AddFavoriteUseCase @Inject constructor(
             FavoriteEntity(
                 productId = product.id,
                 title = product.title,
-                thumbnail = product.thumbnail,
+                images = product.images,
                 description = product.description,
                 price = product.price,
                 discountedPrice = product.discountedPrice

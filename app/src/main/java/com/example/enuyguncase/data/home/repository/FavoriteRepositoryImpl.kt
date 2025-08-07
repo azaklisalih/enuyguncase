@@ -14,7 +14,7 @@ class FavoriteRepositoryImpl @Inject constructor(
             FavoriteEntity(
                 productId = favoriteEntity.productId,
                 title = favoriteEntity.title,
-                thumbnail = favoriteEntity.thumbnail,
+                images = favoriteEntity.images,
                 description = favoriteEntity.description,
                 price = favoriteEntity.price,
                 discountedPrice = favoriteEntity.discountedPrice

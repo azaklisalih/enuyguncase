@@ -14,9 +14,12 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.enuyguncase.R
 import com.example.enuyguncase.databinding.FragmentHomeBinding
+import com.example.enuyguncase.presentation.cart.CartViewModel
 import com.example.enuyguncase.presentation.home.filter.FilterSheetFragment
 import com.example.enuyguncase.presentation.home.sort.SortSheetFragment
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -37,7 +40,6 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         setToolbar()
         setAdapters()
         setObservers()
@@ -104,6 +106,19 @@ class HomeFragment : Fragment() {
             }
 
         }
+
+        /*viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                cartViewModel.cartItems.collect { list ->
+                    val count = list.sumOf { it.quantity }
+                    // ➌ badge oluşturup güncelle
+                    val badge = bottomNav.getOrCreateBadge(R.id.cartFragment)
+                    badge.isVisible = count > 0
+                    badge.number    = count
+                    // eğer sadece nokta istersen: badge.clearNumber()
+                }
+            }
+        }*/
 
     }
 

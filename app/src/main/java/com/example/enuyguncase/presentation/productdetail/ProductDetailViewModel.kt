@@ -3,8 +3,9 @@ package com.example.enuyguncase.presentation.productdetail
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.enuyguncase.domain.model.CartItem
 import com.example.enuyguncase.domain.model.Product
-import com.example.enuyguncase.domain.usecase.productdetail.AddCartUseCase
+import com.example.enuyguncase.domain.usecase.AddToCartUseCase
 import com.example.enuyguncase.domain.usecase.productdetail.AddFavoriteUseCase
 import com.example.enuyguncase.domain.usecase.productdetail.CheckFavoriteUseCase
 import com.example.enuyguncase.domain.usecase.productdetail.GetProductByIdUseCase
@@ -24,7 +25,7 @@ class ProductDetailViewModel @Inject constructor(
     private val getById: GetProductByIdUseCase,
     private val addFav: AddFavoriteUseCase,
     private val removeFav: RemoveFavoriteUseCase,
-    private val addCart: AddCartUseCase,
+    private val addCart: AddToCartUseCase,
     private val checkFav: CheckFavoriteUseCase,
 ) : ViewModel() {
 
@@ -73,5 +74,16 @@ class ProductDetailViewModel @Inject constructor(
         }
     }
 
-    fun addToCart(product: Product) = viewModelScope.launch {}
+    fun addToCart(product: Product) = viewModelScope.launch {
+        addCart.invoke(
+            CartItem(
+                productId = product.id,
+                title = product.title,
+                price = product.price,
+                discountPrice = product.discountPercentage,
+                thumbnail = product.thumbnail,
+                quantity = 1
+                )
+        )
+    }
 }
