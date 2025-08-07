@@ -29,6 +29,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.example.enuyguncase.ui.theme.Surface
 import com.example.enuyguncase.util.StringResource
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -80,9 +81,10 @@ fun CheckoutScreen(
                         )
                     }
                 },
-                colors = TopAppBarDefaults.mediumTopAppBarColors(containerColor = Color.White)
+                colors = TopAppBarDefaults.mediumTopAppBarColors(containerColor = Surface)
             )
-        }
+        },
+        containerColor = Surface,
     ) { innerPadding ->
         Column(
             modifier

@@ -1,5 +1,7 @@
 package com.example.enuyguncase.domain.usecase.home
 
+import com.example.enuyguncase.domain.model.Dimensions
+import com.example.enuyguncase.domain.model.Meta
 import com.example.enuyguncase.domain.model.Product
 import org.junit.Assert.assertEquals
 import org.junit.Before
@@ -29,15 +31,15 @@ class SortProductsLocallyUseCaseTest {
                 images = listOf("image1.jpg"),
                 tags = listOf("smartphone", "apple"),
                 sku = "IPHONE12",
-                weight = 164.0,
-                dimensions = null,
+                weight = 164,
+                dimensions = Dimensions(7.4, 14.6, 0.7),
                 warrantyInformation = "1 year warranty",
                 shippingInformation = "Free shipping",
                 availabilityStatus = "In Stock",
                 reviews = emptyList(),
                 returnPolicy = "30 days return",
                 minimumOrderQuantity = 1,
-                meta = null
+                meta = Meta("2023-01-01", "2023-01-01", "123456789", "QR123")
             ),
             Product(
                 id = 2,
@@ -53,15 +55,15 @@ class SortProductsLocallyUseCaseTest {
                 images = listOf("image2.jpg"),
                 tags = listOf("smartphone", "samsung"),
                 sku = "SAMSUNG21",
-                weight = 169.0,
-                dimensions = null,
+                weight = 169,
+                dimensions = Dimensions(7.2, 15.1, 0.8),
                 warrantyInformation = "1 year warranty",
                 shippingInformation = "Free shipping",
                 availabilityStatus = "In Stock",
                 reviews = emptyList(),
                 returnPolicy = "30 days return",
                 minimumOrderQuantity = 1,
-                meta = null
+                meta = Meta("2023-01-02", "2023-01-02", "987654321", "QR456")
             ),
             Product(
                 id = 3,
@@ -77,15 +79,15 @@ class SortProductsLocallyUseCaseTest {
                 images = listOf("image3.jpg"),
                 tags = listOf("smartphone", "google"),
                 sku = "PIXEL5",
-                weight = 151.0,
-                dimensions = null,
+                weight = 151,
+                dimensions = Dimensions(7.0, 14.4, 0.6),
                 warrantyInformation = "1 year warranty",
                 shippingInformation = "Free shipping",
                 availabilityStatus = "In Stock",
                 reviews = emptyList(),
                 returnPolicy = "30 days return",
                 minimumOrderQuantity = 1,
-                meta = null
+                meta = Meta("2023-01-03", "2023-01-03", "456789123", "QR789")
             )
         )
     }
