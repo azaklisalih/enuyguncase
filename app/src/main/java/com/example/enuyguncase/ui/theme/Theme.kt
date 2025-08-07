@@ -1,15 +1,5 @@
-// app/src/main/java/com/example/enuyguncase/presentation/ui/theme/Theme.kt
-package com.example.enuyguncase.presentation.ui.theme
+package com.example.enuyguncase.ui.theme
 
-import AppTypography
-import Black
-import Error
-import OnError
-import OnPrimary
-import OnSurface
-import Primary
-import Surface
-import White
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
@@ -21,6 +11,7 @@ private val LightColors = lightColorScheme(
     onPrimary    = OnPrimary,
     surface      = Surface,
     onSurface    = OnSurface,
+    surfaceVariant = SurfaceVariant,
     error        = Error,
     onError      = OnError
 )
@@ -30,6 +21,7 @@ private val DarkColors = darkColorScheme(
     onPrimary    = OnPrimary,
     surface      = Black,
     onSurface    = White,
+    surfaceVariant = SurfaceVariant,
     error        = Error,
     onError      = OnError
 )

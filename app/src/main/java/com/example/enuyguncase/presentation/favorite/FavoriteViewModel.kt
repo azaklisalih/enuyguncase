@@ -5,7 +5,6 @@ import androidx.lifecycle.viewModelScope
 import com.example.enuyguncase.domain.model.CartItem
 import com.example.enuyguncase.domain.usecase.AddToCartUseCase
 import com.example.enuyguncase.domain.model.Favorite
-import com.example.enuyguncase.domain.model.Product
 import com.example.enuyguncase.domain.usecase.favorite.GetAllFavoritesUseCase
 import com.example.enuyguncase.domain.usecase.productdetail.RemoveFavoriteUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel

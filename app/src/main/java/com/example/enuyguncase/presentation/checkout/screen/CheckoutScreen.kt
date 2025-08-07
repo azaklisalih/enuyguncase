@@ -1,20 +1,18 @@
 package com.example.enuyguncase.presentation.checkout.screen
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -29,7 +27,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.example.enuyguncase.util.StringResource
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -44,39 +44,52 @@ fun CheckoutScreen(
     onBack: () -> Unit,
     onPay: () -> Unit
 ) {
-    // Sadece telefon alanı için hata durumu
-    val isPhoneError = phone.isBlank()
+    
+    
+    fun formatPhoneNumber(phone: String): String {
+        val digitsOnly = phone.replace("\\D".toRegex(), "")
+        return when {
+            digitsOnly.length <= 4 -> digitsOnly
+            digitsOnly.length <= 7 -> "${digitsOnly.substring(0, 4)} ${digitsOnly.substring(4)}"
+            digitsOnly.length <= 9 -> "${digitsOnly.substring(0, 4)} ${digitsOnly.substring(4, 7)} ${digitsOnly.substring(7)}"
+            else -> "${digitsOnly.substring(0, 4)} ${digitsOnly.substring(4, 7)} ${digitsOnly.substring(7, 9)} ${digitsOnly.substring(9, minOf(11, digitsOnly.length))}"
+        }
+    }
+    
+    
+    val phoneDigitsOnly = phone.replace("\\D".toRegex(), "")
+    val isPhoneValid = phoneDigitsOnly.length >= 10 && phoneDigitsOnly.length <= 11
+    
+    
+    val isNameError = name.isBlank()
+    val isEmailError = email.isBlank() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
+    val isPhoneError = phone.isBlank() || !isPhoneValid
+    
+    
+    val isFormValid = name.isNotBlank() && 
+                     email.isNotBlank() && 
+                     android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches() &&
+                     phone.isNotBlank() &&
+                     isPhoneValid
 
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("CHECKOUT") },
+                title = { 
+                    Text(
+                        text = StringResource.checkoutTitle(),
+                        modifier = Modifier.fillMaxWidth(),
+                        textAlign = TextAlign.Center,
+                        style = MaterialTheme.typography.titleLarge
+                    )
+                },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.Filled.ArrowBack, contentDescription = "Geri")
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = StringResource.commonBack())
                     }
                 },
                 colors = TopAppBarDefaults.mediumTopAppBarColors(containerColor = Color.White)
             )
-        },
-        bottomBar = {
-            // Alt çubuğu kapatmayacak şekilde kalıcı pay butonu
-            Box(
-                Modifier
-                    .fillMaxWidth()
-                    .navigationBarsPadding()   // sistem çubuğunun üstünde
-                    .padding(16.dp)
-            ) {
-                Button(
-                    onClick = onPay,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(56.dp),
-                    shape = RoundedCornerShape(12.dp)
-                ) {
-                    Text("PAY", style = MaterialTheme.typography.titleMedium)
-                }
-            }
         }
     ) { innerPadding ->
         Column(
@@ -95,10 +108,20 @@ fun CheckoutScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(56.dp),
-                label = { Text("Name") },
+                label = { Text(StringResource.checkoutName()) },
                 singleLine = true,
+                isError = isNameError,
                 shape = RoundedCornerShape(12.dp)
             )
+            
+            if (isNameError) {
+                Text(
+                    text = StringResource.checkoutNameRequired(),
+                    color = MaterialTheme.colorScheme.error,
+                    style = MaterialTheme.typography.bodySmall,
+                    modifier = Modifier.padding(start = 12.dp)
+                )
+            }
 
             OutlinedTextField(
                 value = email,
@@ -106,11 +129,21 @@ fun CheckoutScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(56.dp),
-                label = { Text("Email") },
+                label = { Text(StringResource.checkoutEmail()) },
                 singleLine = true,
+                isError = isEmailError,
                 shape = RoundedCornerShape(12.dp),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email)
             )
+            
+            if (isEmailError) {
+                Text(
+                    text = if (email.isBlank()) StringResource.checkoutEmailRequired() else StringResource.checkoutEmailInvalid(),
+                    color = MaterialTheme.colorScheme.error,
+                    style = MaterialTheme.typography.bodySmall,
+                    modifier = Modifier.padding(start = 12.dp)
+                )
+            }
 
             OutlinedTextField(
                 value = phone,
@@ -118,23 +151,45 @@ fun CheckoutScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(56.dp),
-                label = { Text("Phone") },
+                label = { Text(StringResource.checkoutPhone()) },
                 singleLine = true,
                 isError = isPhoneError,
                 shape = RoundedCornerShape(12.dp),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone)
             )
+            
             if (isPhoneError) {
                 Text(
-                    text = "Phone is required",
+                    text = if (phone.isBlank()) StringResource.checkoutPhoneRequired() else StringResource.checkoutPhoneInvalid(),
                     color = MaterialTheme.colorScheme.error,
                     style = MaterialTheme.typography.bodySmall,
                     modifier = Modifier.padding(start = 12.dp)
                 )
             }
 
-            Spacer(Modifier.height(100.dp))
-            // içerik + buton arasına uzun scroll’da padding
+            Spacer(Modifier.height(32.dp))
+            
+            
+            Button(
+                onClick = onPay,
+                enabled = isFormValid,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(60.dp),
+                shape = RoundedCornerShape(12.dp),
+                colors = androidx.compose.material3.ButtonDefaults.buttonColors(
+                    containerColor = if (isFormValid) Color(0xFF2196F3) else Color(0xFFBDBDBD),
+                    disabledContainerColor = Color(0xFFBDBDBD)
+                )
+            ) {
+                Text(
+                    StringResource.checkoutConfirmOrderButton(), 
+                    style = MaterialTheme.typography.labelLarge,
+                    color = if (isFormValid) Color.White else Color(0xFF757575)
+                )
+            }
+            
+            Spacer(Modifier.height(32.dp))
         }
     }
 }

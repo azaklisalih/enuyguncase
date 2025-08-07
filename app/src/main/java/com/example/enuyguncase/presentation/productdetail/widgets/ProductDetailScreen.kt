@@ -1,4 +1,3 @@
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
@@ -9,7 +8,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material.icons.outlined.FavoriteBorder
@@ -23,9 +22,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
+import com.example.enuyguncase.ui.theme.Surface
+import androidx.compose.foundation.Image
 import coil.compose.rememberAsyncImagePainter
 import com.example.enuyguncase.domain.model.Product
 import com.example.enuyguncase.presentation.productdetail.ProductDetailUIState
+import com.example.enuyguncase.ui.theme.ButtonColor
+import com.example.enuyguncase.ui.theme.RedHeart
+import com.example.enuyguncase.util.StringResource
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -39,6 +43,8 @@ fun ProductDetailScreen(
     val product = uiState.product ?: return
 
     Scaffold(
+        modifier = Modifier.background(Surface),
+        containerColor = Surface,
         topBar = {
             CenterAlignedTopAppBar(
                 modifier = Modifier.statusBarsPadding(),
@@ -46,12 +52,12 @@ fun ProductDetailScreen(
                     Text(
                         product.title,
                         maxLines = 1,
-                        style = MaterialTheme.typography.titleMedium
+                        style = MaterialTheme.typography.titleLarge
                     )
                 },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.Filled.ArrowBack, contentDescription = "Geri")
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = StringResource.commonBack())
                     }
                 },
                 actions = {
@@ -61,16 +67,16 @@ fun ProductDetailScreen(
                                 Icons.Filled.Favorite
                             else
                                 Icons.Outlined.FavoriteBorder,
-                            contentDescription = "Favori",
+                            contentDescription = if (isFavorite) StringResource.productDetailRemoveFromFavorites() else StringResource.productDetailAddToFavorites(),
                             tint = if (isFavorite)
-                                MaterialTheme.colorScheme.primary
+                                RedHeart
                             else LocalContentColor.current
                         )
                     }
                 },
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                    containerColor = Color.White,
-                    scrolledContainerColor = Color.White
+                    containerColor = Surface,
+                    scrolledContainerColor = Surface
                 )
             )
         },
@@ -78,11 +84,10 @@ fun ProductDetailScreen(
             Box(
                 Modifier
                     .fillMaxSize()
+                    .background(Surface)
                     .padding(innerPadding)
             ) {
-                // --------------------------------
-                // 1) Scrollable içerik
-                // --------------------------------
+
                 val listState = rememberLazyListState()
                 val currentPage by remember {
                     derivedStateOf { listState.firstVisibleItemIndex }
@@ -91,11 +96,12 @@ fun ProductDetailScreen(
                 Column(
                     Modifier
                         .fillMaxSize()
+                        .background(Surface)
                         .verticalScroll(rememberScrollState())
                         .padding(bottom = 80.dp, start = 16.dp, end = 16.dp),
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
-                    // 1a) Görsel galerisi
+
                     LazyRow(
                         state = listState,
                         modifier = Modifier
@@ -109,7 +115,7 @@ fun ProductDetailScreen(
                                     .fillParentMaxWidth()
                                     .clip(RoundedCornerShape(12.dp))
                             ) {
-                                // 1) Ürün fotoğrafı
+
                                 Image(
                                     painter = rememberAsyncImagePainter(imgUrl),
                                     contentDescription = product.title,
@@ -118,9 +124,9 @@ fun ProductDetailScreen(
                                     contentScale = ContentScale.Crop
                                 )
 
-                                // 2) İndirim rozeti
+
                                 if (product.discountPercentage > 0) {
-                                    val discountText = "%${product.discountPercentage.toInt()}"
+                                    val discountText = StringResource.productDetailDiscount(product.discountPercentage.toInt())
                                     Box(
                                         contentAlignment = Alignment.Center,
                                         modifier = Modifier
@@ -143,7 +149,7 @@ fun ProductDetailScreen(
                         }
                     }
 
-                    // 1b) Dot‐indicator
+
                     Row(
                         Modifier
                             .fillMaxWidth()
@@ -168,8 +174,8 @@ fun ProductDetailScreen(
 
                     Spacer(Modifier.height(16.dp))
 
-                    // 2) Başlık & Açıklama
-                    Text(product.title, style = MaterialTheme.typography.titleLarge)
+
+                    Text(product.title, style = MaterialTheme.typography.headlineSmall)
                     Text(
                         product.description,
                         style = MaterialTheme.typography.bodyMedium,
@@ -178,34 +184,34 @@ fun ProductDetailScreen(
 
                     Spacer(Modifier.height(12.dp))
 
-                    // 3) Fiyat satırı
+
                     Row(
                         Modifier.fillMaxWidth(),
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
                         Text(
-                            text = "${product.price}₺",
-                            style = MaterialTheme.typography.titleMedium.copy(
+                            text = StringResource.productDetailOriginalPriceFormat(product.price),
+                            style = MaterialTheme.typography.titleLarge.copy(
                                 textDecoration = TextDecoration.LineThrough,
-                                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                                color = Color.Black.copy(alpha = 0.6f)
                             )
                         )
                         Text(
-                            text = String.format("%.2f₺", product.discountedPrice),
-                            style = MaterialTheme.typography.titleMedium.copy(
-                                color = MaterialTheme.colorScheme.primary
+                            text = StringResource.productDetailPriceFormat(product.discountedPrice),
+                            style = MaterialTheme.typography.titleLarge.copy(
+                                color = Color.Black
                             )
                         )
                     }
 
-                    // 4) Stok & Puan
+
                     Row(
                         Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.spacedBy(24.dp)
                     ) {
-                        Text("Stok: ${product.stock}", style = MaterialTheme.typography.bodySmall)
-                        Text("Puan: ${product.rating}", style = MaterialTheme.typography.bodySmall)
+                        Text("Stok: ${product.stock}", style = MaterialTheme.typography.labelMedium)
+                        Text("Puan: ${product.rating}", style = MaterialTheme.typography.labelMedium)
                     }
 
                     Spacer(Modifier.height(16.dp))
@@ -214,21 +220,25 @@ fun ProductDetailScreen(
                         onClick = { onAddToCart(product) },
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(56.dp)
+                            .height(72.dp)
                             .align(Alignment.CenterHorizontally)
                             .navigationBarsPadding()
                             .padding(horizontal = 16.dp),
-                        shape = RoundedCornerShape(12.dp)
+                        shape = RoundedCornerShape(12.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = ButtonColor
+                        )
                     ) {
                         Icon(Icons.Filled.ShoppingCart, contentDescription = null)
                         Spacer(Modifier.width(8.dp))
-                        Text("ADD TO CART")
+                        Text(
+                            StringResource.productDetailAddToCart(),
+                            style = MaterialTheme.typography.labelLarge
+                        )
                     }
                 }
 
-                // --------------------------------
-                // 2) Sepete Ekle Butonu (overlay)
-                // --------------------------------
+
 
             }
         }

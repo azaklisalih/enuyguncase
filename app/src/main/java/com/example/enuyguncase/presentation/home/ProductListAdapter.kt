@@ -13,11 +13,11 @@ class ProductListAdapter(
 ) : ListAdapter<Product, ProductListAdapter.ProductViewHolder>(DIFF_CALLBACK) {
 
     init {
-        // Stable IDs, animasyonlar için
+
         setHasStableIds(true)
     }
 
-    // ListAdapter.getItem(position) zaten Product döndürür
+    
     override fun getItemId(position: Int): Long =
         getItem(position).id.toLong()
 

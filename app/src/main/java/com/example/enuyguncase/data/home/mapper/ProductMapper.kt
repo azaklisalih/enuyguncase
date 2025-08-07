@@ -9,6 +9,7 @@ import com.example.enuyguncase.domain.model.Dimensions
 import com.example.enuyguncase.domain.model.Meta
 import com.example.enuyguncase.domain.model.Product
 import com.example.enuyguncase.domain.model.Review
+import com.example.enuyguncase.domain.model.ErrorMessages
 
 
     fun ProductDto.toDomain(): Product = Product(
@@ -21,7 +22,7 @@ import com.example.enuyguncase.domain.model.Review
         rating                = rating,
         stock                 = stock,
         tags                  = tags,
-        brand                 = brand ?: "Unknown",
+        brand                 = brand ?: ErrorMessages.UNKNOWN_BRAND,
         sku                   = sku,
         weight                = weight,
         dimensions            = dimensions.toDomain(),

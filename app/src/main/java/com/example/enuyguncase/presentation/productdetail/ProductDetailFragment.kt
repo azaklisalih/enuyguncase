@@ -25,6 +25,7 @@ class ProductDetailFragment : Fragment() {
         savedInstanceState: Bundle?
     ) = ComposeView(requireContext()).apply {
         setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
+        setBackgroundColor(android.graphics.Color.WHITE)
         setContent {
             val productId = args.productId
             vm.fetchDetail(productId)

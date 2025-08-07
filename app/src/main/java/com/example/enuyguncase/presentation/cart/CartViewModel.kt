@@ -30,5 +30,5 @@ class CartViewModel @Inject constructor(
     fun increaseQuantity(id: Int) = viewModelScope.launch { increaseQty.invoke(id) }
     fun decreaseQuantity(id: Int) = viewModelScope.launch { decreaseQty.invoke(id) }
     fun removeFromCart(id: Int) = viewModelScope.launch { removeFromCart.invoke(id) }
-    //fun checkout() = viewModelScope.launch { checkout() }
+    fun performCheckout() = viewModelScope.launch { checkout() }
 }

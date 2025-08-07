@@ -12,31 +12,46 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
         tools:context=".presentation.home.HomeFragment">
 
-        <!-- Başlık + top count -->
-        <TextView
-            android:id="@+id/tvTitle"
-            android:layout_width="0dp"
+        <!-- Custom Toolbar with Title and Count -->
+        <LinearLayout
+            android:id="@+id/appBarLayout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Ürünler"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/tvCount"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"/>
+            android:orientation="vertical"
+            android:background="@android:color/transparent"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/tvCount"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@{vm.totalCountText}"
-            android:textColor="@color/medium_gray"
-            app:layout_constraintBaseline_toBaselineOf="@id/tvTitle"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginEnd="16dp"/>
+            <!-- Title and Count Row -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingHorizontal="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/home_products"
+                    android:textAppearance="@style/TextStyle_Bold_Medium" />
+
+                <TextView
+                    android:id="@+id/tvCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/medium_gray"
+                    android:textSize="14sp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="4dp"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
 
         <!-- Arama çubuğu ve butonlar -->
         <LinearLayout
@@ -44,11 +59,12 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintTop_toBottomOf="@id/tvTitle"
+            app:layout_constraintTop_toBottomOf="@id/appBarLayout"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="12dp"
-            android:paddingHorizontal="8dp">
+            android:layout_marginTop="16dp"
+            android:paddingHorizontal="8dp"
+            android:gravity="center_vertical">
 
             <!-- Arama çubuğu -->
             <include

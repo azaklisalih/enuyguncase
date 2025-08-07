@@ -40,34 +40,53 @@
                     android:id="@+id/product_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:autoSizeTextType="uniform"
+                    android:autoSizeMinTextSize="14sp"
+                    android:autoSizeMaxTextSize="16sp"
+                    android:autoSizeStepGranularity="1sp"
                     android:text="@{product.title}"
-                    android:textAppearance="?attr/textAppearanceSubtitle1" />
+                    android:textAppearance="@style/TextStyle_ProductTitle" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginEnd="8dp"
                     android:ellipsize="end"
-                    android:maxLines="1"
+                    android:maxLines="2"
+                    android:autoSizeTextType="uniform"
+                    android:autoSizeMinTextSize="12sp"
+                    android:autoSizeMaxTextSize="14sp"
+                    android:autoSizeStepGranularity="1sp"
                     android:text="@{product.description}" />
 
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="center_vertical">
 
                 <!-- 2) Fiyatı formatlayıp göster -->
                 <TextView
+                    android:id="@+id/tv_discounted_price"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textAppearance="@style/TextStyle_Medium_Medium"
+                    android:textColor="@color/black"
                     app:formattedPrice="@{product.discountedPrice}" />
 
                 <!-- 3) Ölçüleri formatlayıp göster -->
                 <TextView
+                    android:id="@+id/tv_original_price"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textAppearance="@style/TextStyle_Medium_Medium"
+                    android:textColor="@color/medium_gray"
                     app:strikeThrough="@{true}"
                     app:formattedDiscountPrice="@{product.price}" />
 

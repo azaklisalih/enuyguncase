@@ -6,6 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
@@ -16,10 +18,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.enuyguncase.R
 import com.example.enuyguncase.databinding.FragmentHomeBinding
-import com.example.enuyguncase.presentation.cart.CartViewModel
 import com.example.enuyguncase.presentation.home.filter.FilterSheetFragment
 import com.example.enuyguncase.presentation.home.sort.SortSheetFragment
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -44,14 +44,29 @@ class HomeFragment : Fragment() {
         setAdapters()
         setObservers()
         setListeners()
+        setupWindowInsets()
+    }
+
+    private fun setupWindowInsets() {
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { _, windowInsets ->
+            val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
+            
+    
+            binding.root.setPadding(
+                binding.root.paddingLeft,
+                insets.top,
+                binding.root.paddingRight,
+                binding.root.paddingBottom
+            )
+            
+            WindowInsetsCompat.CONSUMED
+        }
     }
 
     private fun setToolbar() {
-        (activity as? AppCompatActivity)?.supportActionBar?.apply {
-            title = ""
-            setDisplayHomeAsUpEnabled(false)
-            setDisplayShowHomeEnabled(false)
-        }
+
+        (activity as? AppCompatActivity)?.supportActionBar?.hide()
+        
 
     }
 
@@ -99,6 +114,8 @@ class HomeFragment : Fragment() {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collect { state ->
                     adapter.submitList(state.products)
+        
+                    binding.tvCount.text = getString(R.string.home_total_products_format, state.total)
                     /* binding.progressBar.isVisible = state.error != null
                      binding.tvError.isVisible = state.error != null
                      binding.tvError.text = state.error*/
@@ -111,11 +128,11 @@ class HomeFragment : Fragment() {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 cartViewModel.cartItems.collect { list ->
                     val count = list.sumOf { it.quantity }
-                    // ➌ badge oluşturup güncelle
+    
                     val badge = bottomNav.getOrCreateBadge(R.id.cartFragment)
                     badge.isVisible = count > 0
                     badge.number    = count
-                    // eğer sadece nokta istersen: badge.clearNumber()
+
                 }
             }
         }*/

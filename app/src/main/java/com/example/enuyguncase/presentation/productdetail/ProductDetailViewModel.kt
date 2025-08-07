@@ -1,6 +1,5 @@
 package com.example.enuyguncase.presentation.productdetail
 
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.enuyguncase.domain.model.CartItem
@@ -37,9 +36,6 @@ class ProductDetailViewModel @Inject constructor(
 
     private var currentProduct: Product? = null
 
-    init {
-        //fetchDetail()
-    }
 
     fun fetchDetail(productId: Int) {
         viewModelScope.launch {
@@ -80,7 +76,7 @@ class ProductDetailViewModel @Inject constructor(
                 productId = product.id,
                 title = product.title,
                 price = product.price,
-                discountPrice = product.discountPercentage,
+                discountPrice = product.discountedPrice,
                 thumbnail = product.thumbnail,
                 quantity = 1
                 )

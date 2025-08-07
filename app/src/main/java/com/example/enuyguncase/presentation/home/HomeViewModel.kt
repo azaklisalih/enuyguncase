@@ -3,7 +3,6 @@ package com.example.enuyguncase.presentation.home
 import com.example.enuyguncase.domain.usecase.home.GetCategoriesUseCase
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.enuyguncase.domain.model.Category
 import com.example.enuyguncase.domain.usecase.home.GetProductsByCategoryUseCase
@@ -16,7 +15,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -33,10 +31,6 @@ class HomeViewModel @Inject constructor(
     val uiState: StateFlow<HomeUIState> = _uiState.asStateFlow()
 
     val searchQuery = MutableLiveData("")
-
-    val totalCountText = _uiState
-        .map { "(Toplam ${it.total} adet)" }
-        .asLiveData()
 
     init {
         fetchProducts()

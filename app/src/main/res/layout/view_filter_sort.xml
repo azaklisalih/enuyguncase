@@ -11,26 +11,28 @@
         android:id="@+id/btn_filter"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        app:cardCornerRadius="24dp"
+        app:cardCornerRadius="12dp"
         android:layout_marginEnd="8dp"
-        app:cardElevation="2dp"
+        app:cardElevation="1dp"
+        app:cardBackgroundColor="@color/light_gray"
         app:cardUseCompatPadding="true">
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:paddingHorizontal="16dp">
+            android:paddingHorizontal="12dp">
 
             <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:src="@drawable/ic_filter" />
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:src="@drawable/ic_filter"
+                app:tint="@color/medium_gray" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
+                android:layout_marginStart="6dp"
                 android:text="Filter"
                 android:textColor="@color/medium_gray"
                 android:textSize="14sp"/>
@@ -42,25 +44,27 @@
         android:id="@+id/btn_sort"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        app:cardCornerRadius="24dp"
-        app:cardElevation="2dp"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="1dp"
+        app:cardBackgroundColor="@color/light_gray"
         app:cardUseCompatPadding="true">
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:paddingHorizontal="16dp">
+            android:paddingHorizontal="12dp">
 
             <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:src="@drawable/ic_sort" />
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:src="@drawable/ic_sort"
+                app:tint="@color/medium_gray" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
+                android:layout_marginStart="6dp"
                 android:text="Sort"
                 android:textColor="@color/medium_gray"
                 android:textSize="14sp"/>

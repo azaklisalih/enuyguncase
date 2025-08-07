@@ -14,8 +14,8 @@ interface ProductApi {
     suspend fun getProducts(
         @Query("limit")  limit: Int?   = null,
         @Query("skip")   skip: Int?    = null,
-        @Query("sortBy") sortBy: String? = null,  // örn. "title" veya "price"
-        @Query("order")  order: String?   = null   // "asc" veya "desc"
+            @Query("sortBy") sortBy: String? = null,
+    @Query("order")  order: String?   = null
     ): Response<ProductsResponse>
 
     @GET("products/{id}")

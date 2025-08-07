@@ -2,19 +2,22 @@ package com.example.enuyguncase
 
 import android.os.Bundle
 import androidx.activity.viewModels
-import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.runtime.Composable
 import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
-import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.enuyguncase.databinding.ActivityMainBinding
 import com.example.enuyguncase.presentation.cart.CartViewModel
+import com.example.enuyguncase.ui.theme.EnuygunCaseTheme
+import com.example.enuyguncase.util.LocaleHelper
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -27,17 +30,31 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        
+
+        val savedLanguage = LocaleHelper.getLanguage(this)
+        LocaleHelper.setLocale(this, savedLanguage)
+
+
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+        
+
+        val windowInsetsController = WindowCompat.getInsetsController(window, window.decorView)
+        windowInsetsController.isAppearanceLightStatusBars = true
+        
+
+        window.setBackgroundDrawableResource(android.R.color.white)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        //setSupportActionBar(binding.toolbar)
+
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         binding.bottomNav.setupWithNavController(navController)
 
         setupCartBadge()
 
-        // 4) AppBarConfiguration: anasayfa sayfalarını kök (no-up) olarak işaretle
+
 
     }
 

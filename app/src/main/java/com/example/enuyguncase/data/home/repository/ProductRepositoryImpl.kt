@@ -5,6 +5,7 @@ import com.example.enuyguncase.data.home.remote.api.ProductApi
 import com.example.enuyguncase.data.home.remote.dto.ProductsResponse
 import com.example.enuyguncase.domain.model.Category
 import com.example.enuyguncase.domain.model.Product
+import com.example.enuyguncase.domain.model.ErrorMessages
 import com.example.enuyguncase.domain.repository.ProductRepository
 import com.google.ai.client.generativeai.common.ServerException
 import com.google.assistant.appactions.suggestions.client.ClientException
@@ -30,20 +31,20 @@ class ProductRepositoryImpl @Inject constructor(
         when (response.code()) {
             in 200..299 -> {
                 val body = response.body()
-                    ?: throw Exception("Sunucudan boş yanıt geldi")
+                    ?: throw Exception(ErrorMessages.EMPTY_RESPONSE)
                 emit(body)
             }
 
             in 400..499 -> {
-                throw ClientException(response.message() ?: "İstemci hatası")
+                throw ClientException(response.message() ?: ErrorMessages.CLIENT_ERROR)
             }
 
             in 500..599 -> {
-                throw ServerException(response.message() ?: "Sunucu hatası")
+                throw ServerException(response.message() ?: ErrorMessages.SERVER_ERROR)
             }
 
             else -> {
-                throw Exception("Beklenmeyen HTTP kodu: ${response.code()}")
+                throw Exception("${ErrorMessages.UNEXPECTED_HTTP}: ${response.code()}")
             }
         }
     }.flowOn(Dispatchers.IO)
@@ -52,13 +53,13 @@ class ProductRepositoryImpl @Inject constructor(
         val response = api.getProductById(id)
         when (response.code()) {
             in 200..299 -> {
-                val body = response.body() ?: throw Exception("Sunucudan boş yanıt geldi")
+                val body = response.body() ?: throw Exception(ErrorMessages.EMPTY_RESPONSE)
                 emit(body.toDomain())
             }
 
-            in 400..499 -> throw Exception("İstemci hatası: ${response.message()}")
-            in 500..599 -> throw Exception("Sunucu hatası: ${response.message()}")
-            else -> throw Exception("Beklenmeyen HTTP kodu: ${response.code()}")
+            in 400..499 -> throw Exception("${ErrorMessages.CLIENT_ERROR}: ${response.message()}")
+            in 500..599 -> throw Exception("${ErrorMessages.SERVER_ERROR}: ${response.message()}")
+            else -> throw Exception("${ErrorMessages.UNEXPECTED_HTTP}: ${response.code()}")
         }
     }.flowOn(Dispatchers.IO)
 
@@ -66,13 +67,13 @@ class ProductRepositoryImpl @Inject constructor(
         val response = api.searchProducts(query)
         when (response.code()) {
             in 200..299 -> {
-                val body = response.body() ?: throw Exception("Sunucudan boş yanıt geldi")
+                val body = response.body() ?: throw Exception(ErrorMessages.EMPTY_RESPONSE)
                 emit(body)
             }
 
-            in 400..499 -> throw Exception("İstemci hatası: ${response.message()}")
-            in 500..599 -> throw Exception("Sunucu hatası: ${response.message()}")
-            else -> throw Exception("Beklenmeyen HTTP kodu: ${response.code()}")
+            in 400..499 -> throw Exception("${ErrorMessages.CLIENT_ERROR}: ${response.message()}")
+            in 500..599 -> throw Exception("${ErrorMessages.SERVER_ERROR}: ${response.message()}")
+            else -> throw Exception("${ErrorMessages.UNEXPECTED_HTTP}: ${response.code()}")
         }
     }.flowOn(Dispatchers.IO)
 
@@ -80,13 +81,13 @@ class ProductRepositoryImpl @Inject constructor(
         val response = api.getCategories()
         when (response.code()) {
             in 200..299 -> {
-                val body = response.body() ?: throw Exception("Sunucudan boş yanıt geldi")
+                val body = response.body() ?: throw Exception(ErrorMessages.EMPTY_RESPONSE)
                 emit(body.map { it.toDomain() })
             }
 
-            in 400..499 -> throw Exception("İstemci hatası: ${response.message()}")
-            in 500..599 -> throw Exception("Sunucu hatası: ${response.message()}")
-            else -> throw Exception("Beklenmeyen HTTP kodu: ${response.code()}")
+            in 400..499 -> throw Exception("${ErrorMessages.CLIENT_ERROR}: ${response.message()}")
+            in 500..599 -> throw Exception("${ErrorMessages.SERVER_ERROR}: ${response.message()}")
+            else -> throw Exception("${ErrorMessages.UNEXPECTED_HTTP}: ${response.code()}")
         }
     }.flowOn(Dispatchers.IO)
 
@@ -101,12 +102,12 @@ class ProductRepositoryImpl @Inject constructor(
         when (response.code()) {
             in 200..299 -> emit(
                 response.body()
-                    ?: throw Exception("Sunucudan boş yanıt geldi")
+                    ?: throw Exception(ErrorMessages.EMPTY_RESPONSE)
             )
 
-            in 400..499 -> throw Exception("İstemci hatası: ${response.message()}")
-            in 500..599 -> throw Exception("Sunucu hatası: ${response.message()}")
-            else -> throw Exception("Beklenmeyen HTTP kodu: ${response.code()}")
+            in 400..499 -> throw Exception("${ErrorMessages.CLIENT_ERROR}: ${response.message()}")
+            in 500..599 -> throw Exception("${ErrorMessages.SERVER_ERROR}: ${response.message()}")
+            else -> throw Exception("${ErrorMessages.UNEXPECTED_HTTP}: ${response.code()}")
         }
     }.flowOn(Dispatchers.IO)
 

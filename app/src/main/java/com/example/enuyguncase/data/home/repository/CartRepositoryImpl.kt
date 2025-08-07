@@ -14,5 +14,5 @@ class CartRepositoryImpl @Inject constructor(
     override suspend fun increase(productId: Int) = dao.increaseQuantity(productId)
     override suspend fun decrease(productId: Int) = dao.decreaseQuantity(productId)
     override suspend fun getByProductId(productId: Int) = dao.getItemByProductId(productId)
-
+    override suspend fun clearCart() = dao.clearCart()
 }

@@ -1,4 +1,6 @@
-package com.example.enuyguncase.ui.binding
+package com.example.enuyguncase.presentation.common.binding
+
+import com.example.enuyguncase.R
 
 import android.annotation.SuppressLint
 import android.graphics.Paint
@@ -27,7 +29,7 @@ object BindingAdapters {
     @BindingAdapter("formattedPrice")
     fun formatPrice(view: TextView, price: Double?) {
         view.text = if (price != null) {
-            String.format("%.2f TL", price)
+            String.format(view.context.getString(R.string.currency_format), price)
         } else {
             ""
         }
@@ -37,7 +39,7 @@ object BindingAdapters {
     @JvmStatic
     @BindingAdapter("formattedDiscountPrice")
     fun formatDiscountPrice(view: TextView, amount: Double?) {
-        view.text = amount?.let { String.format("%.2f TL", it) } ?: ""
+        view.text = amount?.let { String.format(view.context.getString(R.string.currency_format), it) } ?: ""
     }
 
     // ui/binding/BindingAdapters.kt

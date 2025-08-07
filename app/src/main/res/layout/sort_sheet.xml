@@ -13,7 +13,7 @@
             android:id="@+id/tvSortTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Sıralama Seç"
+            android:text="@string/sort_title"
             android:textAppearance="?attr/textAppearanceHeadline6"
             android:layout_marginBottom="8dp" />
 

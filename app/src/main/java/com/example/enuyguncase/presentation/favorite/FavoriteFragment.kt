@@ -3,7 +3,6 @@ package com.example.enuyguncase.presentation.favorite
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -11,7 +10,6 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.example.enuyguncase.R
 import com.example.enuyguncase.presentation.favorite.screen.FavoriteScreen
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -24,6 +22,7 @@ class FavoriteFragment : Fragment() {
         savedInstanceState: Bundle?
     ) = ComposeView(requireContext()).apply {
         setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
+        setBackgroundColor(android.graphics.Color.WHITE)
         setContent {
             val favorites by vm.favorites.collectAsState()
 

@@ -52,7 +52,7 @@ class FilterSheetFragment : BottomSheetDialogFragment() {
                                     homeVm.clearFilter()
                                 }
                             }
-                            // Her bir çip arasında boşluk
+                
                             setPadding(8)
                         }
                         chipGroup.addView(chip)
