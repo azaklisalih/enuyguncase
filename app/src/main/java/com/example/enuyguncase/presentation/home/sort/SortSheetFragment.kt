@@ -65,7 +65,7 @@ class SortSheetFragment : BottomSheetDialogFragment() {
 
             homeVm.sortProducts(
                 sortBy = selected.sortBy,
-                order  = selected.order
+                order = selected.order
             )
 
             dismiss()

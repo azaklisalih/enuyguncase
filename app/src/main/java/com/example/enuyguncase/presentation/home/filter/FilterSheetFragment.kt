@@ -32,7 +32,7 @@ class FilterSheetFragment : BottomSheetDialogFragment() {
 
         binding.vm = homeVm
         binding.lifecycleOwner = viewLifecycleOwner
-        val currentCategory = homeVm.uiState.value.selectedCategory
+        var selectedCategoryInFragment = homeVm.uiState.value.selectedCategory
 
         viewLifecycleOwner.lifecycleScope.launch {
             homeVm.loadCategories()
@@ -44,12 +44,12 @@ class FilterSheetFragment : BottomSheetDialogFragment() {
                         val chip = Chip(requireContext()).apply {
                             text = category.displayName
                             isCheckable = true
-                            isChecked = (category.slug == currentCategory)
+                            isChecked = (category.slug == selectedCategoryInFragment)
                             setOnCheckedChangeListener { _, isChecked ->
-                                if (isChecked) {
-                                    homeVm.updateSelectedCategory(category.slug)
+                                selectedCategoryInFragment = if (isChecked) {
+                                    category.slug
                                 } else {
-                                    homeVm.clearFilter()
+                                    null
                                 }
                             }
                 
@@ -62,12 +62,15 @@ class FilterSheetFragment : BottomSheetDialogFragment() {
 
         binding.btnClearFilter.setOnClickListener {
             binding.chipGroupCategories.clearCheck()
+            selectedCategoryInFragment = null
             homeVm.clearFilter()
             dismiss()
         }
 
         binding.btnApply.setOnClickListener {
-            homeVm.fetchByCategory(homeVm.uiState.value.selectedCategory ?: return@setOnClickListener)
+            selectedCategoryInFragment?.let { category ->
+                homeVm.fetchByCategory(category)
+            } ?: homeVm.clearFilter()
             dismiss()
         }
     }

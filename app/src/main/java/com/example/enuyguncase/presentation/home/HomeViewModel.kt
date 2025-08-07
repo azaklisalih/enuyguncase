@@ -5,9 +5,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.enuyguncase.domain.model.Category
+import com.example.enuyguncase.domain.model.Product
 import com.example.enuyguncase.domain.usecase.home.GetProductsByCategoryUseCase
 import com.example.enuyguncase.domain.usecase.home.GetProductsUseCase
 import com.example.enuyguncase.domain.usecase.home.SearchProductsUseCase
+import com.example.enuyguncase.domain.usecase.home.SortProductsLocallyUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
@@ -24,7 +26,8 @@ class HomeViewModel @Inject constructor(
     private val getProducts: GetProductsUseCase,
     private val getByCategory: GetProductsByCategoryUseCase,
     private val searchProducts: SearchProductsUseCase,
-    private val getCategories: GetCategoriesUseCase
+    private val getCategories: GetCategoriesUseCase,
+    private val sortProductsLocally: SortProductsLocallyUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(HomeUIState(isLoading = true))
@@ -47,7 +50,7 @@ class HomeViewModel @Inject constructor(
             val flow = if (category == null) {
                 getProducts(limit, skip, sortBy, order)
             } else {
-                getByCategory(category, limit, skip)
+                getByCategory(category, limit, skip, null, null)
             }
             flow.onStart {
                 _uiState.update { it.copy(isLoading = true, error = null) }
@@ -60,9 +63,16 @@ class HomeViewModel @Inject constructor(
                     } else {
                         prev.products + page.products
                     }
+                    
+                    val sortedProducts = if (category != null && sortBy != null) {
+                        sortProductsLocally(combined, sortBy, order)
+                    } else {
+                        combined
+                    }
+                    
                     val newPage = if (skip == 0) 0 else prev.page + 1
                     prev.copy(
-                        products = combined,
+                        products = sortedProducts,
                         isLoading = false,
                         total = page.total,
                         page = newPage,
@@ -76,7 +86,22 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun fetchProducts() = loadPage(category = null)
-    fun sortProducts(sortBy: String?, order: String?) = loadPage(sortBy = sortBy, order = order)
+    fun sortProducts(sortBy: String?, order: String?) {
+        val currentState = uiState.value
+        
+        if (currentState.selectedCategory != null) {
+            val sortedProducts = sortProductsLocally(currentState.products, sortBy, order)
+            _uiState.update {
+                it.copy(
+                    products = sortedProducts,
+                    selectedSortBy = sortBy,
+                    selectedSortOrder = order
+                )
+            }
+        } else {
+            loadPage(sortBy = sortBy, order = order)
+        }
+    }
 
     fun fetchByCategory(category: String) = loadPage(category = category)
 
@@ -126,7 +151,5 @@ class HomeViewModel @Inject constructor(
         }
         fetchProducts()
     }
-    fun updateSelectedCategory(category: String) {
-        _uiState.update { it.copy(selectedCategory = category) }
-    }
+    
 }
