@@ -1,6 +1,4 @@
 package com.example.enuyguncase.presentation.common.binding
-
-
 import android.graphics.Paint
 import android.widget.ImageView
 import android.widget.TextView
@@ -44,7 +42,6 @@ object BindingAdapters {
         return numberFormat.format(amount)
     }
 
-    // ui/binding/BindingAdapters.kt
     @BindingAdapter("strikeThrough")
     @JvmStatic
     fun strikeThrough(textView: TextView, strike: Boolean) {

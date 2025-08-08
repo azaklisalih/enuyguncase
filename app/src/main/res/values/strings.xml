@@ -8,6 +8,7 @@
     
     <!-- Home Screen -->
     <string name="home_products">Ürünler</string>
+    <string name="home_clear_filters">Filtreleri Temizle</string>
     <string name="home_filter">Filtre</string>
     <string name="home_sort">Sırala</string>
     <string name="home_search_hint">Ürün ara…</string>

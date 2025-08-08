@@ -8,6 +8,7 @@
     
     <!-- Home Screen -->
     <string name="home_products">Products</string>
+    <string name="home_clear_filters">Clear Filters</string>
     <string name="home_filter">Filter</string>
     <string name="home_sort">Sort</string>
     <string name="home_search_hint">Search products…</string>

@@ -50,6 +50,22 @@
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="2dp"/>
 
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"/>
+
+                <ImageView
+                    android:id="@+id/btnClearFilters"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_clear_filter"
+                    android:contentDescription="@string/home_clear_filters"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:padding="4dp"
+                    android:visibility="visible"
+                    android:alpha="0.8"/>
+
             </LinearLayout>
 
         </LinearLayout>
