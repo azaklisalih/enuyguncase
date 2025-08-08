@@ -18,14 +18,22 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import com.example.enuyguncase.ui.theme.Surface
 import androidx.compose.foundation.Image
+import androidx.compose.animation.core.*
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.animateFloatAsState
+import kotlinx.coroutines.launch
 import coil.compose.rememberAsyncImagePainter
 import com.example.enuyguncase.domain.model.Product
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsPressedAsState
 import com.example.enuyguncase.presentation.productdetail.ProductDetailUIState
 import com.example.enuyguncase.presentation.productdetail.screen.ProductDetailShimmerScreen
 import com.example.enuyguncase.ui.theme.ButtonColor
@@ -229,28 +237,95 @@ fun ProductDetailScreen(
 
                     Spacer(Modifier.height(16.dp))
 
+                    var showSuccess by remember { mutableStateOf(false) }
+                    val scope = rememberCoroutineScope()
+                    val interactionSource = remember { MutableInteractionSource() }
+                    val isPressedState by interactionSource.collectIsPressedAsState()
+                    
+                    val scale by animateFloatAsState(
+                        targetValue = if (isPressedState) 0.95f else 1f,
+                        animationSpec = tween(durationMillis = 150),
+                        label = "button_scale"
+                    )
+                    
+                    val buttonColor by animateColorAsState(
+                        targetValue = when {
+                            showSuccess -> Color(0xFF4CAF50) // Green for success
+                            isPressedState -> ButtonColor.copy(alpha = 0.8f)
+                            else -> ButtonColor
+                        },
+                        animationSpec = tween(durationMillis = 300),
+                        label = "button_color"
+                    )
+
                     Button(
-                        onClick = { onAddToCart(product) },
+                        onClick = { 
+                            if (!showSuccess) {
+                                onAddToCart(product)
+                                showSuccess = true
+                                scope.launch {
+                                    kotlinx.coroutines.delay(2000)
+                                    showSuccess = false
+                                }
+                            }
+                        },
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(72.dp)
                             .align(Alignment.CenterHorizontally)
                             .navigationBarsPadding()
-                            .padding(horizontal = 16.dp),
+                            .padding(horizontal = 16.dp)
+                            .scale(scale)
+                            .animateContentSize(
+                                animationSpec = spring(
+                                    dampingRatio = Spring.DampingRatioMediumBouncy,
+                                    stiffness = Spring.StiffnessLow
+                                )
+                            ),
                         shape = RoundedCornerShape(12.dp),
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = ButtonColor
-                        )
+                            containerColor = buttonColor
+                        ),
+                        interactionSource = interactionSource
                     ) {
-                        Icon(Icons.Filled.ShoppingCart, contentDescription = null)
-                        Spacer(Modifier.width(8.dp))
-                        Text(
-                            StringResource.productDetailAddToCart(),
-                            style = MaterialTheme.typography.labelLarge
+                        ButtonContent(
+                            showSuccess = showSuccess,
+                            isPressedState = isPressedState
                         )
                     }
                 }
             }
         }
     )
+}
+
+@Composable
+private fun ButtonContent(
+    showSuccess: Boolean,
+    isPressedState: Boolean
+) {
+    if (showSuccess) {
+        Icon(
+            Icons.Filled.ShoppingCart, 
+            contentDescription = null,
+            modifier = Modifier.scale(1.2f)
+        )
+        Spacer(Modifier.width(8.dp))
+        Text(
+            StringResource.productDetailAddedToCart(),
+            style = MaterialTheme.typography.labelLarge,
+            color = Color.White
+        )
+    } else {
+        Icon(
+            Icons.Filled.ShoppingCart, 
+            contentDescription = null,
+            modifier = Modifier.scale(if (isPressedState) 1.1f else 1f)
+        )
+        Spacer(Modifier.width(8.dp))
+        Text(
+            StringResource.productDetailAddToCart(),
+            style = MaterialTheme.typography.labelLarge
+        )
+    }
 }

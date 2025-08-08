@@ -20,79 +20,12 @@ object StringResource {
         return stringResource(id = resId, formatArgs = formatArgs)
     }
     
-    // Navigation
-    @Composable
-    fun navHome() = getString(R.string.nav_home)
-    
-    @Composable
-    fun navFavorites() = getString(R.string.nav_favorites)
-    
-    @Composable
-    fun navCart() = getString(R.string.nav_cart)
-    
-    // Home Screen
-    @Composable
-    fun homeProducts() = getString(R.string.home_products)
-    
-    @Composable
-    fun homeFilter() = getString(R.string.home_filter)
-    
-    @Composable
-    fun homeSort() = getString(R.string.home_sort)
-    
-    @Composable
-    fun homeSearchHint() = getString(R.string.home_search_hint)
-    
-    @Composable
-    fun homeTotalProducts(count: Int) = getString(R.string.home_total_products, count)
-    
-    @Composable
-    fun homeTotalProductsFormat(count: Int) = getString(R.string.home_total_products_format, count)
-    
-    @Composable
-    fun homeNoProducts() = getString(R.string.home_no_products)
-    
-    @Composable
-    fun homeErrorMessage() = getString(R.string.home_error_message)
-    
-    // Filter Screen
-    @Composable
-    fun filterTitle() = getString(R.string.filter_title)
-    
-    @Composable
-    fun filterClear() = getString(R.string.filter_clear)
-    
-    @Composable
-    fun filterApply() = getString(R.string.filter_apply)
-    
-    @Composable
-    fun filterAllCategories() = getString(R.string.filter_all_categories)
-    
-    // Sort Screen
-    @Composable
-    fun sortTitle() = getString(R.string.sort_title)
-    
-    @Composable
-    fun sortPriceLowToHigh() = getString(R.string.sort_price_low_to_high)
-    
-    @Composable
-    fun sortPriceHighToLow() = getString(R.string.sort_price_high_to_low)
-    
-    @Composable
-    fun sortNameAToZ() = getString(R.string.sort_name_a_to_z)
-    
-    @Composable
-    fun sortNameZToA() = getString(R.string.sort_name_z_to_a)
-    
-    @Composable
-    fun sortRating() = getString(R.string.sort_rating)
-    
-    // Product Detail
-    @Composable
-    fun productDetailTitle() = getString(R.string.product_detail_title)
-    
+    // Product Detail (used in ProductDetailScreen)
     @Composable
     fun productDetailAddToCart() = getString(R.string.product_detail_add_to_cart)
+    
+    @Composable
+    fun productDetailAddedToCart() = getString(R.string.product_detail_added_to_cart)
     
     @Composable
     fun productDetailAddToFavorites() = getString(R.string.product_detail_add_to_favorites)
@@ -109,16 +42,7 @@ object StringResource {
     @Composable
     fun productDetailOriginalPriceFormat(price: Double) = getString(R.string.product_detail_original_price_format, price)
     
-    @Composable
-    fun productDetailDescription() = getString(R.string.product_detail_description)
-    
-    @Composable
-    fun productDetailReviews() = getString(R.string.product_detail_reviews)
-    
-    @Composable
-    fun productDetailRating() = getString(R.string.product_detail_rating)
-    
-    // Cart Screen
+    // Cart Screen (used in CartScreen)
     @Composable
     fun cartTitle() = getString(R.string.cart_title)
     
@@ -132,19 +56,10 @@ object StringResource {
     fun cartTotalLabel() = getString(R.string.cart_total_label)
     
     @Composable
-    fun cartEmpty() = getString(R.string.cart_empty)
-    
-    @Composable
-    fun cartTotal(amount: Double) = getString(R.string.cart_total, amount)
-    
-    @Composable
     fun cartCheckout() = getString(R.string.cart_checkout)
     
     @Composable
     fun cartRemoveItem() = getString(R.string.cart_remove_item)
-    
-    @Composable
-    fun cartQuantity(quantity: Int) = getString(R.string.cart_quantity, quantity)
     
     @Composable
     fun cartPriceFormat(price: Double) = getString(R.string.cart_price_format, price)
@@ -152,20 +67,14 @@ object StringResource {
     @Composable
     fun cartDiscountPriceFormat(price: Double) = getString(R.string.cart_discount_price_format, price)
     
-    // Favorite Screen
+    // Favorite Screen (used in FavoriteScreen)
     @Composable
     fun favoriteTitle() = getString(R.string.favorite_title)
     
     @Composable
-    fun favoriteEmpty() = getString(R.string.favorite_empty)
-    
-    @Composable
     fun favoritePriceFormat(price: Double) = getString(R.string.favorite_price_format, price)
     
-    @Composable
-    fun favoriteRemove() = getString(R.string.favorite_remove)
-    
-    // Checkout Screen
+    // Checkout Screen (used in CheckoutScreen)
     @Composable
     fun checkoutTitle() = getString(R.string.checkout_title)
     
@@ -194,19 +103,7 @@ object StringResource {
     fun checkoutPhoneInvalid() = getString(R.string.checkout_phone_invalid)
     
     @Composable
-    fun checkoutTotalAmount(amount: Double) = getString(R.string.checkout_total_amount, amount)
-    
-    @Composable
-    fun checkoutConfirmOrder() = getString(R.string.checkout_confirm_order)
-    
-    @Composable
     fun checkoutConfirmOrderButton() = getString(R.string.checkout_confirm_order_button)
-    
-    @Composable
-    fun checkoutSuccess() = getString(R.string.checkout_success)
-    
-    @Composable
-    fun checkoutError() = getString(R.string.checkout_error)
     
     // Order Success Screen
     @Composable
@@ -233,45 +130,8 @@ object StringResource {
     @Composable
     fun orderSuccessTrackingInfo() = getString(R.string.order_success_tracking_info)
     
-    // Common
-    @Composable
-    fun commonLoading() = getString(R.string.common_loading)
-    
-    @Composable
-    fun commonError() = getString(R.string.common_error)
-    
-    @Composable
-    fun commonSuccess() = getString(R.string.common_success)
-    
-    @Composable
-    fun commonCancel() = getString(R.string.common_cancel)
-    
-    @Composable
-    fun commonOk() = getString(R.string.common_ok)
-    
-    @Composable
-    fun commonYes() = getString(R.string.common_yes)
-    
-    @Composable
-    fun commonNo() = getString(R.string.common_no)
-    
-    @Composable
-    fun commonRetry() = getString(R.string.common_retry)
-    
+    // Common (used in various screens)
     @Composable
     fun commonBack() = getString(R.string.common_back)
-    
-    @Composable
-    fun commonNext() = getString(R.string.common_next)
-    
-    @Composable
-    fun commonPrevious() = getString(R.string.common_previous)
-    
-    // Currency
-    @Composable
-    fun currencyFormat(amount: Double) = getString(R.string.currency_format, amount)
-    
-    @Composable
-    fun currencySymbol() = getString(R.string.currency_symbol)
     
 } 
