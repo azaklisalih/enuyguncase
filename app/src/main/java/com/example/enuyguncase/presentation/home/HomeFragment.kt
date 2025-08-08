@@ -105,11 +105,12 @@ class HomeFragment : Fragment() {
         }
 
         binding.searchBar.etSearch.doAfterTextChanged {
+            if (!binding.searchBar.etSearch.hasFocus()) return@doAfterTextChanged
             viewModel.searchProducts(it.toString())
         }
 
         binding.btnRetry.setOnClickListener {
-            viewModel.fetchProducts()
+                viewModel.fetchProducts()
         }
 
         binding.btnClearFilters.setOnClickListener {
