@@ -71,6 +71,15 @@ class ProductListAdapter(
             submitList(products)
         }
     }
+    
+    fun forceRefresh(products: List<Product>) {
+        if (!isLoading) {
+            println("DEBUG: Adapter forceRefresh - Products count: ${products.size}")
+            println("DEBUG: Adapter forceRefresh - First product: ${products.firstOrNull()?.title}")
+            submitList(null)
+            submitList(products)
+        }
+    }
 
     inner class ProductViewHolder(
         private val binding: ItemProductBinding
@@ -104,7 +113,7 @@ class ProductListAdapter(
 
             override fun areContentsTheSame(old: Any, new: Any): Boolean {
                 return when {
-                    old is Product && new is Product -> old == new
+                    old is Product && new is Product -> old.id == new.id
                     old is ShimmerItem && new is ShimmerItem -> old.id == new.id
                     else -> false
                 }

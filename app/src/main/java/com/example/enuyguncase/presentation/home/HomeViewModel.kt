@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.enuyguncase.domain.model.Category
-import com.example.enuyguncase.domain.model.Product
 import com.example.enuyguncase.domain.usecase.home.GetProductsByCategoryUseCase
 import com.example.enuyguncase.domain.usecase.home.GetProductsUseCase
 import com.example.enuyguncase.domain.usecase.home.SearchProductsUseCase
@@ -76,9 +75,11 @@ class HomeViewModel @Inject constructor(
                             combined
                         }
                         
+                        val newProductsList = sortedProducts.toList()
+                        
                         val newPage = if (skip == 0) 0 else prev.page + 1
                         prev.copy(
-                            products = sortedProducts,
+                            products = newProductsList,
                             isLoading = false,
                             total = page.total,
                             page = newPage,
@@ -100,9 +101,11 @@ class HomeViewModel @Inject constructor(
         
         if (currentState.selectedCategory != null) {
             val sortedProducts = sortProductsLocally(currentState.products, sortBy, order)
+            val newProductsList = sortedProducts.toList()
+            
             _uiState.update {
                 it.copy(
-                    products = sortedProducts,
+                    products = newProductsList,
                     selectedSortBy = sortBy,
                     selectedSortOrder = order
                 )
@@ -124,9 +127,10 @@ class HomeViewModel @Inject constructor(
                     _uiState.update { it.copy(isLoading = false, error = e.message) }
                 }
                 .collect { page ->
+                    val newProductsList = page.products.toList()
                     _uiState.update {
                         it.copy(
-                            products = page.products,
+                            products = newProductsList,
                             total = page.total,
                             page = 0,
                             selectedCategory = null,

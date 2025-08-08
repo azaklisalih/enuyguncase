@@ -20,11 +20,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.enuyguncase.R
 import com.example.enuyguncase.databinding.FragmentHomeBinding
-import com.example.enuyguncase.presentation.common.navigation.NavigationRouter
 import com.example.enuyguncase.presentation.home.filter.FilterSheetFragment
 import com.example.enuyguncase.presentation.home.sort.SortSheetFragment
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -33,9 +31,6 @@ class HomeFragment : Fragment() {
     private val binding get() = _binding!!
     private val viewModel: HomeViewModel by activityViewModels()
     private lateinit var adapter: ProductListAdapter
-    
-    @Inject
-    lateinit var navigationRouter: NavigationRouter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) = FragmentHomeBinding.inflate(inflater, container, false).also {
         _binding = it
@@ -92,7 +87,7 @@ class HomeFragment : Fragment() {
 
     private fun setAdapters() {
         adapter = ProductListAdapter { product ->
-            navigationRouter.navigateToProductDetail(findNavController(), product.id)
+            findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToProductDetailFragment(product.id))
         }
         binding.rvProducts.adapter = adapter
         binding.rvProducts.layoutManager = LinearLayoutManager(requireContext())
@@ -115,6 +110,10 @@ class HomeFragment : Fragment() {
 
         binding.btnRetry.setOnClickListener {
             viewModel.fetchProducts()
+        }
+
+        binding.btnClearFilters.setOnClickListener {
+            viewModel.clearFilter()
         }
 
         binding.rvProducts.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -151,8 +150,17 @@ class HomeFragment : Fragment() {
                         binding.tvCount.text = getString(R.string.home_total_products_format, 0)
                     } else {
                         adapter.setLoading(false)
-                        adapter.submitProducts(state.products)
+                        adapter.forceRefresh(state.products)
                         binding.tvCount.text = getString(R.string.home_total_products_format, state.total)
+                        
+                        // Show/hide clear filters icon based on active filters
+                        val hasActiveFilters = state.selectedCategory != null || state.selectedSortBy != null
+                        binding.btnClearFilters.visibility = if (hasActiveFilters) View.VISIBLE else View.GONE
+                        
+                        // Debug: Log filter state
+                        println("DEBUG: Filter state - Category: ${state.selectedCategory}, SortBy: ${state.selectedSortBy}")
+                        println("DEBUG: Has active filters: $hasActiveFilters")
+                        
                         binding.errorLayout.visibility = View.GONE
                         binding.rvProducts.visibility = View.VISIBLE
                     }
