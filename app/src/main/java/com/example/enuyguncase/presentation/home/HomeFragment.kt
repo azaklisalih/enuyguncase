@@ -95,12 +95,12 @@ class HomeFragment : Fragment() {
 
     private fun setListeners() {
         binding.filterSortBar.btnFilter.setOnClickListener{
-            hideKeyboard() // Filter açılırken keyboard'u kapat
+            hideKeyboard()
             FilterSheetFragment().show(childFragmentManager, "filter_sheet")
         }
 
         binding.filterSortBar.btnSort.setOnClickListener{
-            hideKeyboard() // Sort açılırken keyboard'u kapat
+            hideKeyboard()
             SortSheetFragment().show(childFragmentManager, "sort_sheet")
         }
 
@@ -152,15 +152,8 @@ class HomeFragment : Fragment() {
                         adapter.setLoading(false)
                         adapter.forceRefresh(state.products)
                         binding.tvCount.text = getString(R.string.home_total_products_format, state.total)
-                        
-                        // Show/hide clear filters icon based on active filters
                         val hasActiveFilters = state.selectedCategory != null || state.selectedSortBy != null
                         binding.btnClearFilters.visibility = if (hasActiveFilters) View.VISIBLE else View.GONE
-                        
-                        // Debug: Log filter state
-                        println("DEBUG: Filter state - Category: ${state.selectedCategory}, SortBy: ${state.selectedSortBy}")
-                        println("DEBUG: Has active filters: $hasActiveFilters")
-                        
                         binding.errorLayout.visibility = View.GONE
                         binding.rvProducts.visibility = View.VISIBLE
                     }
