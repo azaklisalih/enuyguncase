@@ -33,7 +33,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="6dp"
-                android:text="Filter"
+                android:text="@string/home_filter"
                 android:textColor="@color/medium_gray"
                 android:textSize="14sp"/>
         </LinearLayout>
@@ -65,7 +65,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="6dp"
-                android:text="Sort"
+                android:text="@string/home_sort"
                 android:textColor="@color/medium_gray"
                 android:textSize="14sp"/>
         </LinearLayout>

@@ -40,6 +40,7 @@ import com.example.enuyguncase.R
 import com.example.enuyguncase.domain.model.CartItem
 import com.example.enuyguncase.ui.theme.Black
 import com.example.enuyguncase.ui.theme.CardColor
+import com.example.enuyguncase.ui.theme.LightGray
 import com.example.enuyguncase.ui.theme.MediumGray
 import com.example.enuyguncase.ui.theme.Surface
 import com.example.enuyguncase.util.StringResource
@@ -166,7 +167,7 @@ private fun BasketItemRow(
                 .fillMaxWidth()
                 .padding(12.dp),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(12.dp)
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             AsyncImage(
                 model = cartItem.thumbnail.takeIf { it.isNotBlank() },
@@ -176,7 +177,6 @@ private fun BasketItemRow(
                     .size(60.dp)
                     .clip(RoundedCornerShape(8.dp))
             )
-
 
             Column(modifier = Modifier.weight(1f)) {
                 Text(
@@ -192,7 +192,7 @@ private fun BasketItemRow(
                     Spacer(Modifier.width(8.dp))
                     Text(
                         text = StringResource.cartPriceFormat(cartItem.price),
-                        style = MaterialTheme.typography.labelMedium.copy(
+                        style = MaterialTheme.typography.labelSmall.copy(
                             textDecoration = TextDecoration.LineThrough,
                             color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
                         )
@@ -200,22 +200,62 @@ private fun BasketItemRow(
                 }
             }
 
-            IconButton(onClick = onDecrease) {
-                Text("-", style = MaterialTheme.typography.titleLarge)
-            }
-            Text(
-                text = cartItem.quantity.toString(),
-                style = MaterialTheme.typography.titleMedium
-            )
-            IconButton(onClick = onIncrease) {
-                Text("+", style = MaterialTheme.typography.titleLarge)
+            // Quantity controls - compact with square boxes
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(4.dp)
+            ) {
+                Card(
+                    modifier = Modifier.size(32.dp),
+                    shape = RoundedCornerShape(4.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = if (cartItem.quantity > 1) LightGray else LightGray.copy(alpha = 0.3f)
+                    )
+                ) {
+                    IconButton(
+                        onClick = onDecrease,
+                        modifier = Modifier.fillMaxSize(),
+                        enabled = cartItem.quantity > 1
+                    ) {
+                        Text(
+                            "-", 
+                            style = MaterialTheme.typography.titleSmall,
+                            color = if (cartItem.quantity > 1) MaterialTheme.colorScheme.onSurface else LightGray.copy(alpha = 0.3f)
+                        )
+                    }
+                }
+                
+                Text(
+                    text = cartItem.quantity.toString(),
+                    style = MaterialTheme.typography.titleSmall,
+                    modifier = Modifier.padding(horizontal = 8.dp)
+                )
+                
+                Card(
+                    modifier = Modifier.size(32.dp),
+                    shape = RoundedCornerShape(4.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = LightGray
+                    )
+                ) {
+                    IconButton(
+                        onClick = onIncrease,
+                        modifier = Modifier.fillMaxSize()
+                    ) {
+                        Text("+", style = MaterialTheme.typography.titleSmall)
+                    }
+                }
             }
 
-            IconButton(onClick = onRemove) {
+            IconButton(
+                onClick = onRemove,
+                modifier = Modifier.size(32.dp)
+            ) {
                 Icon(
                     painter = painterResource(R.drawable.ic_remove),
                     contentDescription = StringResource.cartRemoveItem(),
-                    tint = MaterialTheme.colorScheme.error
+                    tint = MaterialTheme.colorScheme.error,
+                    modifier = Modifier.size(16.dp)
                 )
             }
         }
