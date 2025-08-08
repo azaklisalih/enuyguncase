@@ -2,6 +2,8 @@ package com.example.enuyguncase.util
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.platform.LocalConfiguration
+import java.text.NumberFormat
 import com.example.enuyguncase.R
 
 /**
@@ -37,10 +39,10 @@ object StringResource {
     fun productDetailDiscount(percentage: Int) = getString(R.string.product_detail_discount, percentage)
     
     @Composable
-    fun productDetailPriceFormat(price: Double) = getString(R.string.product_detail_price_format, price)
+    fun productDetailPriceFormat(price: Double) = formatCurrency(price)
     
     @Composable
-    fun productDetailOriginalPriceFormat(price: Double) = getString(R.string.product_detail_original_price_format, price)
+    fun productDetailOriginalPriceFormat(price: Double) = formatCurrency(price)
     
     // Cart Screen (used in CartScreen)
     @Composable
@@ -62,17 +64,17 @@ object StringResource {
     fun cartRemoveItem() = getString(R.string.cart_remove_item)
     
     @Composable
-    fun cartPriceFormat(price: Double) = getString(R.string.cart_price_format, price)
+    fun cartPriceFormat(price: Double) = formatCurrency(price)
     
     @Composable
-    fun cartDiscountPriceFormat(price: Double) = getString(R.string.cart_discount_price_format, price)
+    fun cartDiscountPriceFormat(price: Double) = formatCurrency(price)
     
     // Favorite Screen (used in FavoriteScreen)
     @Composable
     fun favoriteTitle() = getString(R.string.favorite_title)
     
     @Composable
-    fun favoritePriceFormat(price: Double) = getString(R.string.favorite_price_format, price)
+    fun favoritePriceFormat(price: Double) = formatCurrency(price)
     
     // Checkout Screen (used in CheckoutScreen)
     @Composable
@@ -133,5 +135,13 @@ object StringResource {
     // Common (used in various screens)
     @Composable
     fun commonBack() = getString(R.string.common_back)
+    
+    // Currency formatting
+    @Composable
+    private fun formatCurrency(amount: Double): String {
+        val locale = LocalConfiguration.current.locales[0]
+        val numberFormat = NumberFormat.getCurrencyInstance(locale)
+        return numberFormat.format(amount)
+    }
     
 } 

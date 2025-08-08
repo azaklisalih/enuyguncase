@@ -1,13 +1,13 @@
 package com.example.enuyguncase.presentation.common.binding
 
-import com.example.enuyguncase.R
 
-import android.annotation.SuppressLint
 import android.graphics.Paint
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
+import java.text.NumberFormat
+import java.util.Locale
 
 object BindingAdapters {
 
@@ -23,22 +23,25 @@ object BindingAdapters {
         }
     }
 
-    @SuppressLint("DefaultLocale")
     @JvmStatic
     @BindingAdapter("formattedPrice")
     fun formatPrice(view: TextView, price: Double?) {
         view.text = if (price != null) {
-            String.format(view.context.getString(R.string.currency_format), price)
+            formatCurrency(price, view.context.resources.configuration.locales[0])
         } else {
             ""
         }
     }
 
-    @SuppressLint("DefaultLocale")
     @JvmStatic
     @BindingAdapter("formattedDiscountPrice")
     fun formatDiscountPrice(view: TextView, amount: Double?) {
-        view.text = amount?.let { String.format(view.context.getString(R.string.currency_format), it) } ?: ""
+        view.text = amount?.let { formatCurrency(it, view.context.resources.configuration.locales[0]) } ?: ""
+    }
+
+    private fun formatCurrency(amount: Double, locale: Locale): String {
+        val numberFormat = NumberFormat.getCurrencyInstance(locale)
+        return numberFormat.format(amount)
     }
 
     // ui/binding/BindingAdapters.kt
